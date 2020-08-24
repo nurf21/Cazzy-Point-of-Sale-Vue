@@ -4,20 +4,20 @@
     <h5 class="user">{{user}}</h5>
     <hr />
     <b-navbar variant="faded" type="light">
-      <b-navbar-brand href="#">
-        <img src="@/assets/img/waiter.png" class="d-inline-block align-top" alt="Kitten" />
+      <b-navbar-brand href="home">
+        <img src="@/assets/img/waiter.png" class="d-inline-block align-top" alt="foods" />
         Food and Drink
       </b-navbar-brand>
     </b-navbar>
     <b-navbar variant="faded" type="light">
       <b-navbar-brand href="statistic">
-        <img src="@/assets/img/dashboard.png" class="d-inline-block align-top" alt="Kitten" />
+        <img src="@/assets/img/dashboard.png" class="d-inline-block align-top" alt="statistic" />
         Statistic
       </b-navbar-brand>
     </b-navbar>
     <b-navbar variant="faded" type="light">
       <b-navbar-brand href="setting">
-        <img src="@/assets/img/settings.png" class="d-inline-block align-top" alt="Kitten" />
+        <img src="@/assets/img/settings.png" class="d-inline-block align-top" alt="setting" />
         Setting
       </b-navbar-brand>
     </b-navbar>
@@ -46,6 +46,9 @@ export default {
   }
   .navbar {
     margin: 10px auto;
+  }
+  a.navbar-brand:hover {
+    color: red;
   }
   .navbar img {
     width: 30px;

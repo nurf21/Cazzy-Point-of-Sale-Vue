@@ -2,16 +2,8 @@
   <div class="home">
     <b-container fluid>
       <b-row>
-        <b-col cols="12" lg="8" class="home-header">
-          <b-row>
-            <b-col cols="2" class="header-icon">
-              <img src="@/assets/img/menu.png" alt="toggle-menu" v-b-toggle.sidebar-backdrop />
-            </b-col>
-            <b-col cols="8" class="header-text">
-              <h1>Menu</h1>
-            </b-col>
-            <b-col cols="2" class="header-icon"></b-col>
-          </b-row>
+        <b-col cols="12" lg="8" class="header">
+          <Header text="Menu" />
         </b-col>
 
         <b-col cols="12" lg="4" class="cart-header">
@@ -25,12 +17,12 @@
       <b-row>
         <b-col cols="12" lg="8" class="container-menu">
           <b-navbar>
-            <b-nav-form>
-              <b-form-input class="mr-sm-2" placeholder="Search"></b-form-input>
+            <b-nav-form v-on:submit.prevent="searchProduct">
+              <b-form-input class="mr-sm-2" placeholder="Search" v-model="keyword"></b-form-input>
               <b-button variant="info" class="my-2 my-sm-0" type="submit">Search</b-button>
             </b-nav-form>
 
-            <b-dropdown id="sort" text="Sort" class="m-2" variant="info">
+            <b-dropdown id="sort" text="Sort" class="m-2 sort-btn" variant="info">
               <b-dropdown-group id="dropdown-group-1" header="Name">
                 <b-dropdown-item-button>A-Z</b-dropdown-item-button>
                 <b-dropdown-item-button>Z-A</b-dropdown-item-button>
@@ -65,7 +57,7 @@
                   {{ value.product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') }}
                 </strong>
               </p>
-              <b-button>Add to cart</b-button>
+              <b-button class="add-cart">Add to cart</b-button>
             </b-col>
 
             <div class="mt-3">
@@ -93,20 +85,22 @@
 
 <script>
 import axios from 'axios'
+import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 
 export default {
   name: 'Home',
   components: {
+    Header,
     Sidebar
   },
   data() {
     return {
       greet: 'Welcome',
       user: 'Cashier #1',
-      isSearch: false,
       cart: 0,
       limit: 6,
+      keyword: '',
       product: [],
       img: require('@/assets/img/blank-product.jpg'),
       rows: 100,
@@ -122,6 +116,18 @@ export default {
         .get(`http://127.0.0.1:3001/product?limit=${this.limit}`)
         .then((response) => {
           this.product = response.data.data
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    searchProduct() {
+      console.log(this.keyword)
+      axios
+        .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
+        .then((response) => {
+          this.product = response.data.data
+          console.log(this.product)
         })
         .catch((error) => {
           console.log(error)
