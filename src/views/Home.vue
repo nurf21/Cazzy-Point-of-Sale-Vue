@@ -144,7 +144,6 @@ export default {
           for (let i = 0; i < this.product.length; i++) {
             this.addCartBtn.push({ isAdd: false })
           }
-          console.log(this.addCartBtn)
         })
         .catch((error) => {
           console.log(error)
@@ -154,7 +153,10 @@ export default {
       axios
         .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
         .then((response) => {
+          console.log(response)
           this.product = response.data.data.searchResult
+          this.totalData = response.data.data.totalData
+          console.log(this.totalData)
         })
         .catch((error) => {
           console.log(error)
