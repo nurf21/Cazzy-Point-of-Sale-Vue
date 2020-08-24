@@ -41,9 +41,11 @@
 
 .add-cart {
   border: none;
+  margin-top: 10px;
 }
 
-.add-cart:hover {
+.add-cart:hover,
+.add-cart:focus {
   background-color: cadetblue;
 }
 

@@ -19,7 +19,7 @@
           <b-row class="menu-row">
             <b-col cols="12" class="option">
               <b-form v-on:submit.prevent="searchProduct" inline>
-                <b-input placeholder="Enter the keyword" v-model="keyword"></b-input>
+                <b-input placeholder="Enter keyword" v-model="keyword"></b-input>
                 <b-button variant="info" type="submit" class="ml-md-2">Search</b-button>
 
                 <b-dropdown id="sort" :text="sortText" class="m-2 sort-btn" variant="info">
@@ -63,7 +63,12 @@
             </b-col>
           </b-row>
           <div class="mt-3">
-            <b-pagination v-model="currentPage" :total-rows="rows"></b-pagination>
+            <b-pagination
+              v-model="page"
+              :total-rows="totalData"
+              :per-page="limit"
+              @change="pageChange"
+            ></b-pagination>
           </div>
         </b-col>
 
@@ -101,13 +106,13 @@ export default {
       user: 'Cashier #1',
       sortText: 'Sort',
       cartCount: 0,
+      totalData: 0,
+      page: 1,
       limit: 6,
       keyword: '',
       sort: '',
       product: [],
-      img: require('@/assets/img/blank-product.jpg'),
-      rows: 100,
-      currentPage: 1
+      img: require('@/assets/img/blank-product.jpg')
     }
   },
   created() {
@@ -116,9 +121,10 @@ export default {
   methods: {
     getProduct() {
       axios
-        .get(`http://127.0.0.1:3001/product?limit=${this.limit}&sort=${this.sort}`)
+        .get(`http://127.0.0.1:3001/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
         .then((response) => {
           this.product = response.data.data
+          this.totalData = response.data.pagination.totalData
         })
         .catch((error) => {
           console.log(error)
@@ -167,6 +173,10 @@ export default {
     sortPriceDesc() {
       this.sortText = 'Price (Highest)'
       this.sort = 'product_price DESC'
+      this.getProduct()
+    },
+    pageChange(value) {
+      this.page = value
       this.getProduct()
     }
   },
