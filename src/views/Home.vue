@@ -80,6 +80,7 @@
               :total-rows="totalData"
               :per-page="limit"
               @change="pageChange"
+              v-show="showPagination"
             ></b-pagination>
           </div>
         </b-col>
@@ -125,7 +126,8 @@ export default {
       sort: '',
       product: [],
       img: require('@/assets/img/blank-product.jpg'),
-      addCartBtn: []
+      addCartBtn: [],
+      showPagination: true
     }
   },
   created() {
@@ -139,6 +141,7 @@ export default {
       axios
         .get(`http://127.0.0.1:3001/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
         .then((response) => {
+          this.keyword = ''
           this.product = response.data.data
           this.totalData = response.data.pagination.totalData
           for (let i = 0; i < this.product.length; i++) {
@@ -150,58 +153,70 @@ export default {
         })
     },
     searchProduct() {
-      axios
-        .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
-        .then((response) => {
-          console.log(response)
-          this.product = response.data.data.searchResult
-          this.totalData = response.data.data.totalData
-          console.log(this.totalData)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      if (this.keyword === '') {
+        this.getProduct()
+        this.showPagination = true
+      } else {
+        axios
+          .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
+          .then((response) => {
+            this.showPagination = false
+            this.sortText = 'Sort'
+            this.product = response.data.data.searchResult
+            this.totalData = response.data.data.totalData
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     sortCategory() {
       this.sortText = 'Category'
       this.sort = 'category_id'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     sortNameAsc() {
       this.sortText = 'Name (A-Z)'
       this.sort = 'product_name ASC'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     sortNameDesc() {
       this.sortText = 'Name (Z-A)'
       this.sort = 'product_name DESC'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     sortDateAsc() {
       this.sortText = 'Date (Oldest)'
       this.sort = 'product_created_at ASC'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     sortDateDesc() {
       this.sortText = 'Date (Newest)'
       this.sort = 'product_created_at DESC'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     sortPriceAsc() {
       this.sortText = 'Price (Lowest)'
       this.sort = 'product_price ASC'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     sortPriceDesc() {
       this.sortText = 'Price (Highest)'
       this.sort = 'product_price DESC'
       this.page = 1
+      this.showPagination = true
       this.getProduct()
     },
     addCart(index) {
