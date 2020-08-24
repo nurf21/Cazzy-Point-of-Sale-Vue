@@ -59,9 +59,21 @@
                   {{ value.product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') }}
                 </strong>
               </p>
-              <b-button class="add-cart">Add to cart</b-button>
+              <b-button
+                class="add-cart"
+                variant="info"
+                @click="addCart(index)"
+                v-show="!addCartBtn[index].isAdd"
+              >Add to cart</b-button>
+              <b-button
+                class="remove-cart"
+                variant="danger"
+                v-show="addCartBtn[index].isAdd"
+                @click="removeCart(index)"
+              >Remove from cart</b-button>
             </b-col>
           </b-row>
+
           <div class="mt-3">
             <b-pagination
               v-model="page"
@@ -112,19 +124,27 @@ export default {
       keyword: '',
       sort: '',
       product: [],
-      img: require('@/assets/img/blank-product.jpg')
+      img: require('@/assets/img/blank-product.jpg'),
+      addCartBtn: []
     }
   },
   created() {
     this.getProduct()
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0)
+    },
     getProduct() {
       axios
         .get(`http://127.0.0.1:3001/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
         .then((response) => {
           this.product = response.data.data
           this.totalData = response.data.pagination.totalData
+          for (let i = 0; i < this.product.length; i++) {
+            this.addCartBtn.push({ isAdd: false })
+          }
+          console.log(this.addCartBtn)
         })
         .catch((error) => {
           console.log(error)
@@ -143,41 +163,57 @@ export default {
     sortCategory() {
       this.sortText = 'Category'
       this.sort = 'category_id'
+      this.page = 1
       this.getProduct()
     },
     sortNameAsc() {
       this.sortText = 'Name (A-Z)'
       this.sort = 'product_name ASC'
+      this.page = 1
       this.getProduct()
     },
     sortNameDesc() {
       this.sortText = 'Name (Z-A)'
       this.sort = 'product_name DESC'
+      this.page = 1
       this.getProduct()
     },
     sortDateAsc() {
       this.sortText = 'Date (Oldest)'
       this.sort = 'product_created_at ASC'
+      this.page = 1
       this.getProduct()
     },
     sortDateDesc() {
       this.sortText = 'Date (Newest)'
       this.sort = 'product_created_at DESC'
+      this.page = 1
       this.getProduct()
     },
     sortPriceAsc() {
       this.sortText = 'Price (Lowest)'
       this.sort = 'product_price ASC'
+      this.page = 1
       this.getProduct()
     },
     sortPriceDesc() {
       this.sortText = 'Price (Highest)'
       this.sort = 'product_price DESC'
+      this.page = 1
       this.getProduct()
+    },
+    addCart(index) {
+      this.addCartBtn[index].isAdd = true
+      this.cartCount += 1
+    },
+    removeCart(index) {
+      this.addCartBtn[index].isAdd = false
+      this.cartCount -= 1
     },
     pageChange(value) {
       this.page = value
       this.getProduct()
+      this.scrollToTop()
     }
   },
   computed: {

@@ -44,6 +44,12 @@
   margin-top: 10px;
 }
 
+.remove-cart {
+  background: #f24f8a;
+  border: none;
+  margin-top: 10px;
+}
+
 .add-cart:hover,
 .add-cart:focus {
   background-color: cadetblue;
