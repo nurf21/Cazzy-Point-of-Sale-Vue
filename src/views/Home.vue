@@ -16,30 +16,6 @@
 
       <b-row>
         <b-col cols="12" lg="8" class="container-menu">
-          <!-- <b-navbar>
-            <b-nav-form v-on:submit.prevent="searchProduct">
-              <b-form-input class="mr-sm-2" placeholder="Search" v-model="keyword"></b-form-input>
-              <b-button variant="info" class="my-2 my-sm-0" type="submit">Search</b-button>
-            </b-nav-form>
-
-            <b-dropdown id="sort" text="Sort" class="m-2 sort-btn" variant="info">
-              <b-dropdown-group id="dropdown-group-1" header="Name">
-                <b-dropdown-item-button>A-Z</b-dropdown-item-button>
-                <b-dropdown-item-button>Z-A</b-dropdown-item-button>
-              </b-dropdown-group>
-              <b-dropdown-divider></b-dropdown-divider>
-              <b-dropdown-item-button>Category</b-dropdown-item-button>
-              <b-dropdown-group id="dropdown-group-2" header="Date">
-                <b-dropdown-item-button>Oldest</b-dropdown-item-button>
-                <b-dropdown-item-button>Newest</b-dropdown-item-button>
-              </b-dropdown-group>
-              <b-dropdown-group id="dropdown-group-3" header="Price">
-                <b-dropdown-item-button>Lowest</b-dropdown-item-button>
-                <b-dropdown-item-button>Highest</b-dropdown-item-button>
-              </b-dropdown-group>
-            </b-dropdown>
-          </b-navbar>-->
-
           <b-row class="menu-row">
             <b-col cols="12" class="option">
               <b-form v-on:submit.prevent="searchProduct" inline>
@@ -93,7 +69,7 @@
           <p>
             Your cart is empty
             <br />
-            <span class="text-muted">Please add some items from the menu</span>
+            <span>Please add some items from the menu</span>
           </p>
         </b-col>
       </b-row>
@@ -152,7 +128,6 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          console.log(this.product)
         })
     }
   },
