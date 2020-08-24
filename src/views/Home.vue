@@ -162,6 +162,7 @@ export default {
           .then((response) => {
             this.showPagination = false
             this.sortText = 'Sort'
+            this.sort = ''
             this.product = response.data.data.searchResult
             this.totalData = response.data.data.totalData
           })
