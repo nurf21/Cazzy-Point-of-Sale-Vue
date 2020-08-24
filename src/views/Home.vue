@@ -9,14 +9,14 @@
         <b-col cols="12" lg="4" class="cart-header">
           <h2>
             Cart
-            <b-badge>{{ cart }}</b-badge>
+            <b-badge>{{ cartCount }}</b-badge>
           </h2>
         </b-col>
       </b-row>
 
       <b-row>
         <b-col cols="12" lg="8" class="container-menu">
-          <b-navbar>
+          <!-- <b-navbar>
             <b-nav-form v-on:submit.prevent="searchProduct">
               <b-form-input class="mr-sm-2" placeholder="Search" v-model="keyword"></b-form-input>
               <b-button variant="info" class="my-2 my-sm-0" type="submit">Search</b-button>
@@ -38,9 +38,32 @@
                 <b-dropdown-item-button>Highest</b-dropdown-item-button>
               </b-dropdown-group>
             </b-dropdown>
-          </b-navbar>
+          </b-navbar>-->
 
           <b-row class="menu-row">
+            <b-col cols="12" class="option">
+              <b-form v-on:submit.prevent="searchProduct" inline>
+                <b-input placeholder="Enter the keyword" v-model="keyword"></b-input>
+                <b-button variant="info" type="submit" class="ml-md-2">Search</b-button>
+
+                <b-dropdown id="sort" text="Sort" class="m-2 sort-btn" variant="info">
+                  <b-dropdown-group id="dropdown-group-1" header="Name">
+                    <b-dropdown-item-button>A-Z</b-dropdown-item-button>
+                    <b-dropdown-item-button>Z-A</b-dropdown-item-button>
+                  </b-dropdown-group>
+                  <b-dropdown-divider></b-dropdown-divider>
+                  <b-dropdown-item-button>Category</b-dropdown-item-button>
+                  <b-dropdown-group id="dropdown-group-2" header="Date">
+                    <b-dropdown-item-button>Oldest</b-dropdown-item-button>
+                    <b-dropdown-item-button>Newest</b-dropdown-item-button>
+                  </b-dropdown-group>
+                  <b-dropdown-group id="dropdown-group-3" header="Price">
+                    <b-dropdown-item-button>Lowest</b-dropdown-item-button>
+                    <b-dropdown-item-button>Highest</b-dropdown-item-button>
+                  </b-dropdown-group>
+                </b-dropdown>
+              </b-form>
+            </b-col>
             <b-col
               cols="12"
               lg="4"
@@ -59,11 +82,10 @@
               </p>
               <b-button class="add-cart">Add to cart</b-button>
             </b-col>
-
-            <div class="mt-3">
-              <b-pagination v-model="currentPage" :total-rows="rows"></b-pagination>
-            </div>
           </b-row>
+          <div class="mt-3">
+            <b-pagination v-model="currentPage" :total-rows="rows"></b-pagination>
+          </div>
         </b-col>
 
         <b-col cols="12" lg="4" class="cart-list-empty">
@@ -98,7 +120,7 @@ export default {
     return {
       greet: 'Welcome',
       user: 'Cashier #1',
-      cart: 0,
+      cartCount: 0,
       limit: 6,
       keyword: '',
       product: [],
@@ -122,15 +144,15 @@ export default {
         })
     },
     searchProduct() {
-      console.log(this.keyword)
       axios
         .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
         .then((response) => {
-          this.product = response.data.data
+          this.product = response.data.data.searchResult
           console.log(this.product)
         })
         .catch((error) => {
           console.log(error)
+          console.log(this.product)
         })
     }
   },

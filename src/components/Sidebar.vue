@@ -4,7 +4,7 @@
     <h5 class="user">{{user}}</h5>
     <hr />
     <b-navbar variant="faded" type="light">
-      <b-navbar-brand href="home">
+      <b-navbar-brand href="/">
         <img src="@/assets/img/waiter.png" class="d-inline-block align-top" alt="foods" />
         Food and Drink
       </b-navbar-brand>
