@@ -22,24 +22,27 @@
                 <b-input placeholder="Enter the keyword" v-model="keyword"></b-input>
                 <b-button variant="info" type="submit" class="ml-md-2">Search</b-button>
 
-                <b-dropdown id="sort" text="Sort" class="m-2 sort-btn" variant="info">
+                <b-dropdown id="sort" :text="sortText" class="m-2 sort-btn" variant="info">
+                  <b-dropdown-item-button @click="sortCategory()" active>Category</b-dropdown-item-button>
+                  <b-dropdown-divider></b-dropdown-divider>
                   <b-dropdown-group id="dropdown-group-1" header="Name">
-                    <b-dropdown-item-button>A-Z</b-dropdown-item-button>
-                    <b-dropdown-item-button>Z-A</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="sortNameAsc()">A-Z</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="sortNameDesc()">Z-A</b-dropdown-item-button>
                   </b-dropdown-group>
                   <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-item-button>Category</b-dropdown-item-button>
                   <b-dropdown-group id="dropdown-group-2" header="Date">
-                    <b-dropdown-item-button>Oldest</b-dropdown-item-button>
-                    <b-dropdown-item-button>Newest</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="sortDateAsc()">Oldest</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="sortDateDesc()">Newest</b-dropdown-item-button>
                   </b-dropdown-group>
+                  <b-dropdown-divider></b-dropdown-divider>
                   <b-dropdown-group id="dropdown-group-3" header="Price">
-                    <b-dropdown-item-button>Lowest</b-dropdown-item-button>
-                    <b-dropdown-item-button>Highest</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="sortPriceAsc()">Lowest</b-dropdown-item-button>
+                    <b-dropdown-item-button @click="sortPriceDesc()">Highest</b-dropdown-item-button>
                   </b-dropdown-group>
                 </b-dropdown>
               </b-form>
             </b-col>
+
             <b-col
               cols="12"
               lg="4"
@@ -96,9 +99,11 @@ export default {
     return {
       greet: 'Welcome',
       user: 'Cashier #1',
+      sortText: 'Sort',
       cartCount: 0,
       limit: 6,
       keyword: '',
+      sort: '',
       product: [],
       img: require('@/assets/img/blank-product.jpg'),
       rows: 100,
@@ -111,7 +116,7 @@ export default {
   methods: {
     getProduct() {
       axios
-        .get(`http://127.0.0.1:3001/product?limit=${this.limit}`)
+        .get(`http://127.0.0.1:3001/product?limit=${this.limit}&sort=${this.sort}`)
         .then((response) => {
           this.product = response.data.data
         })
@@ -124,11 +129,45 @@ export default {
         .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
         .then((response) => {
           this.product = response.data.data.searchResult
-          console.log(this.product)
         })
         .catch((error) => {
           console.log(error)
         })
+    },
+    sortCategory() {
+      this.sortText = 'Category'
+      this.sort = 'category_id'
+      this.getProduct()
+    },
+    sortNameAsc() {
+      this.sortText = 'Name (A-Z)'
+      this.sort = 'product_name ASC'
+      this.getProduct()
+    },
+    sortNameDesc() {
+      this.sortText = 'Name (Z-A)'
+      this.sort = 'product_name DESC'
+      this.getProduct()
+    },
+    sortDateAsc() {
+      this.sortText = 'Date (Oldest)'
+      this.sort = 'product_created_at ASC'
+      this.getProduct()
+    },
+    sortDateDesc() {
+      this.sortText = 'Date (Newest)'
+      this.sort = 'product_created_at DESC'
+      this.getProduct()
+    },
+    sortPriceAsc() {
+      this.sortText = 'Price (Lowest)'
+      this.sort = 'product_price ASC'
+      this.getProduct()
+    },
+    sortPriceDesc() {
+      this.sortText = 'Price (Highest)'
+      this.sort = 'product_price DESC'
+      this.getProduct()
     }
   },
   computed: {
