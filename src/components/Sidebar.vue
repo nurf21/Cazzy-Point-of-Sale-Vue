@@ -5,19 +5,19 @@
     <hr />
     <b-navbar variant="faded" type="light">
       <b-navbar-brand href="/">
-        <img src="@/assets/img/waiter.png" class="d-inline-block align-top" alt="foods" />
+        <img src="@/assets/img/waiter.png" class="mr-2 d-inline-block align-top" alt="foods" />
         Food and Drink
       </b-navbar-brand>
     </b-navbar>
     <b-navbar variant="faded" type="light">
       <b-navbar-brand href="statistic">
-        <img src="@/assets/img/dashboard.png" class="d-inline-block align-top" alt="statistic" />
+        <img src="@/assets/img/dashboard.png" class="mr-2 d-inline-block align-top" alt="statistic" />
         Statistic
       </b-navbar-brand>
     </b-navbar>
     <b-navbar variant="faded" type="light">
       <b-navbar-brand href="setting">
-        <img src="@/assets/img/settings.png" class="d-inline-block align-top" alt="setting" />
+        <img src="@/assets/img/settings.png" class="mr-2 d-inline-block align-top" alt="setting" />
         Setting
       </b-navbar-brand>
     </b-navbar>

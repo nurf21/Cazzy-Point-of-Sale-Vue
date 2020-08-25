@@ -9,7 +9,7 @@
         <b-col cols="12" lg="4" class="cart-header">
           <h2>
             Cart
-            <b-badge>{{ cartCount }}</b-badge>
+            <b-badge>{{ cartCount() }}</b-badge>
           </h2>
         </b-col>
       </b-row>
@@ -85,13 +85,44 @@
           </div>
         </b-col>
 
-        <b-col cols="12" lg="4" class="cart-list-empty">
+        <b-col cols="12" lg="4" class="cart-list-empty" v-if="cartCount() < 1">
           <img src="@/assets/img/empty-cart.png" alt />
           <p>
             Your cart is empty
             <br />
             <span>Please add some items from the menu</span>
           </p>
+        </b-col>
+
+        <b-col cols="12" lg="4" class="cart-list" v-else>
+          <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
+            <b-col cols="4">
+              <b-img :src="img" fluid />
+            </b-col>
+            <b-col cols="5" style="padding: 0">
+              <p class="name-cart">{{value.product_name}}</p>
+              <b-button class="plus-minus" variant="success">-</b-button>
+              <input type="text" v-model="value.qty" class="qty" />
+              <b-button class="plus-minus" variant="success">+</b-button>
+            </b-col>
+            <b-col cols="3" style="padding: 0" align-self="end">
+              <p
+                class="price-cart"
+              >Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+            </b-col>
+          </b-row>
+          <b-row class="checkout">
+            <b-col cols="6">
+              <p>
+                Total :
+                <br />
+                <span>*Tax not included</span>
+              </p>
+            </b-col>
+            <b-col cols="6" style="text-align: end;">
+              <p>Rp. {{countTotal().toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}*</p>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
 
@@ -144,9 +175,6 @@ export default {
           this.keyword = ''
           this.product = response.data.data
           this.totalData = response.data.pagination.totalData
-          for (let i = 0; i < this.product.length; i++) {
-            this.addCartBtn.push({ isAdd: false })
-          }
         })
         .catch((error) => {
           console.log(error)
@@ -239,17 +267,22 @@ export default {
       this.page = value
       this.getProduct()
       this.scrollToTop()
+    },
+    cartCount() {
+      return this.cart.length
+    },
+    countTotal() {
+      let total = 0
+      for (let i = 0; i < this.cart.length; i++) {
+        total += this.cart[i].product_price * this.cart[i].qty
+      }
+      return total
     }
   },
   computed: {
     msg: {
       get() {
         return `${this.greet}, ${this.user} !`
-      }
-    },
-    cartCount: {
-      get() {
-        return this.cart.length
       }
     }
   }
