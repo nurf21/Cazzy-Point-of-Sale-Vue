@@ -62,14 +62,14 @@
               <b-button
                 class="add-cart"
                 variant="info"
-                @click="addCart(index)"
-                v-show="!addCartBtn[index].isAdd"
+                @click="addCart(value)"
+                v-if="!checkCart(value)"
               >Add to cart</b-button>
               <b-button
                 class="remove-cart"
                 variant="danger"
-                v-show="addCartBtn[index].isAdd"
-                @click="removeCart(index)"
+                @click="removeCart(value)"
+                v-else
               >Remove from cart</b-button>
             </b-col>
           </b-row>
@@ -118,13 +118,13 @@ export default {
       greet: 'Welcome',
       user: 'Cashier #1',
       sortText: 'Sort',
-      cartCount: 0,
       totalData: 0,
       page: 1,
       limit: 6,
       keyword: '',
       sort: '',
       product: [],
+      cart: [],
       img: require('@/assets/img/blank-product.jpg'),
       addCartBtn: [],
       showPagination: true
@@ -220,13 +220,20 @@ export default {
       this.showPagination = true
       this.getProduct()
     },
-    addCart(index) {
-      this.addCartBtn[index].isAdd = true
-      this.cartCount += 1
+    addCart(data) {
+      const setCart = {
+        product_id: data.product_id,
+        product_name: data.product_name,
+        product_price: data.product_price,
+        qty: 1
+      }
+      this.cart = [...this.cart, setCart]
     },
-    removeCart(index) {
-      this.addCartBtn[index].isAdd = false
-      this.cartCount -= 1
+    checkCart(data) {
+      return this.cart.some((item) => item.product_id === data.product_id)
+    },
+    removeCart(data) {
+      return this.cart.splice(this.cart.findIndex(item => item.product_id === data.product_id), 1)
     },
     pageChange(value) {
       this.page = value
@@ -238,6 +245,11 @@ export default {
     msg: {
       get() {
         return `${this.greet}, ${this.user} !`
+      }
+    },
+    cartCount: {
+      get() {
+        return this.cart.length
       }
     }
   }
