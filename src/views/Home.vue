@@ -95,22 +95,24 @@
         </b-col>
 
         <b-col cols="12" lg="4" class="cart-list" v-else>
-          <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
-            <b-col cols="4">
-              <b-img :src="img" fluid />
-            </b-col>
-            <b-col cols="5" style="padding: 0">
-              <p class="name-cart">{{value.product_name}}</p>
-              <b-button class="plus-minus" variant="success">-</b-button>
-              <input type="text" v-model="value.qty" class="qty" />
-              <b-button class="plus-minus" variant="success">+</b-button>
-            </b-col>
-            <b-col cols="3" style="padding: 0" align-self="end">
-              <p
-                class="price-cart"
-              >Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
-            </b-col>
-          </b-row>
+          <div class="cart-overflow">
+            <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
+              <b-col cols="4">
+                <b-img :src="img" fluid />
+              </b-col>
+              <b-col cols="5" style="padding: 0">
+                <p class="name-cart">{{value.product_name}}</p>
+                <b-button class="plus-minus" variant="success" @click="minus(value)">-</b-button>
+                <input type="text" v-model="value.qty" class="qty" />
+                <b-button class="plus-minus" variant="success" @click="plus(value)">+</b-button>
+              </b-col>
+              <b-col cols="3" style="padding: 0" align-self="end">
+                <p
+                  class="price-cart"
+                >Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+              </b-col>
+            </b-row>
+          </div>
           <b-row class="checkout">
             <b-col cols="6">
               <p>
@@ -122,6 +124,8 @@
             <b-col cols="6" style="text-align: end;">
               <p>Rp. {{countTotal().toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}*</p>
             </b-col>
+            <b-button class="checkout-btn" variant="info" style="background: #57cad5;">Checkout</b-button>
+            <b-button class="cancel-btn" variant="danger" style="background: #F24F8A;">Cancel</b-button>
           </b-row>
         </b-col>
       </b-row>
@@ -262,6 +266,16 @@ export default {
     },
     removeCart(data) {
       return this.cart.splice(this.cart.findIndex(item => item.product_id === data.product_id), 1)
+    },
+    minus(data) {
+      if (data.qty === 1) {
+        this.removeCart(data)
+      } else {
+        data.qty -= 1
+      }
+    },
+    plus(data) {
+      data.qty += 1
     },
     pageChange(value) {
       this.page = value
