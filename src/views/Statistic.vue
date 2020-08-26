@@ -13,8 +13,16 @@
             <article class="today-income">
               <div class="article-container">
                 <p>Today's Income</p>
-                <h3>Rp. 1.000.000</h3>
-                <p>+2% Yesterday</p>
+                <h3>
+                  Rp.
+                  {{
+                    todayIncome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+                  }}
+                </h3>
+                <p v-if="todayIncome > prevIncome">
+                  +{{ dailyProfit() }}% Yesterday
+                </p>
+                <p v-else>{{ dailyProfit() }}% Yesterday</p>
                 <img
                   src="@/assets/img/Ellipse 1.png"
                   alt="ellipse"
@@ -38,7 +46,7 @@
             <article class="order">
               <div class="article-container">
                 <p>Orders</p>
-                <h3>3270</h3>
+                <h3>{{ totalData }}</h3>
                 <p>+5% Last Week</p>
                 <img
                   src="@/assets/img/Ellipse 2.png"
@@ -136,6 +144,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Sidebar from '@/components/Sidebar'
 import Header from '@/components/Header'
 
@@ -187,7 +196,51 @@ export default {
             '2020-08-22': Math.floor(Math.random() * 100000 + 1)
           }
         }
-      ]
+      ],
+      currDate: new Date().toJSON().slice(0, 10),
+      todayIncome: 0,
+      prevDate: new Date(Date.now() - 864e5).toJSON().slice(0, 10),
+      prevIncome: 0,
+      totalData: 0,
+      history: []
+    }
+  },
+  created() {
+    this.getHistory()
+    this.getTodayIncome()
+    this.getPrevIncome()
+  },
+  methods: {
+    getHistory() {
+      axios.get('http://127.0.0.1:3001/history?limit=100').then(response => {
+        this.history = response.data.data
+        this.totalData = response.data.pagination.totalData
+      })
+    },
+    getTodayIncome() {
+      axios
+        .get(`http://127.0.0.1:3001/history/income?date=${this.currDate}`)
+        .then(response => {
+          this.todayIncome = response.data.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    getPrevIncome() {
+      axios
+        .get(`http://127.0.0.1:3001/history/income?date=${this.prevDate}`)
+        .then(response => {
+          this.prevIncome = response.data.data
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    dailyProfit() {
+      const count =
+        ((this.todayIncome - this.prevIncome) / this.prevIncome) * 100
+      return Math.ceil(count)
     }
   },
   computed: {
