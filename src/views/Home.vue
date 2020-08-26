@@ -102,9 +102,11 @@
               </b-col>
               <b-col cols="5" style="padding: 0">
                 <p class="name-cart">{{value.product_name}}</p>
-                <b-button class="plus-minus" variant="success" @click="minus(value)">-</b-button>
-                <input type="text" v-model="value.qty" class="qty" />
-                <b-button class="plus-minus" variant="success" @click="plus(value)">+</b-button>
+                <b-input-group>
+                  <b-button class="plus-minus" variant="success" @click="minus(value)">-</b-button>
+                  <input type="text" v-model="value.qty" class="qty" />
+                  <b-button class="plus-minus" variant="success" @click="plus(value)">+</b-button>
+                </b-input-group>
               </b-col>
               <b-col cols="3" style="padding: 0" align-self="end">
                 <p
