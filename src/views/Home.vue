@@ -124,8 +124,19 @@
             <b-col cols="6" style="text-align: end;">
               <p>Rp. {{countTotal().toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}*</p>
             </b-col>
-            <b-button class="checkout-btn" variant="info" style="background: #57cad5;">Checkout</b-button>
-            <b-button class="cancel-btn" variant="danger" style="background: #F24F8A;">Cancel</b-button>
+            <b-button
+              class="checkout-btn"
+              variant="info"
+              style="background: #57cad5;"
+              @click="postOrder(cart)"
+              v-b-modal.modal-checkout
+            >Checkout</b-button>
+            <b-button
+              class="cancel-btn"
+              variant="danger"
+              style="background: #F24F8A;"
+              @click="cancelCart()"
+            >Cancel</b-button>
           </b-row>
         </b-col>
       </b-row>
@@ -133,6 +144,46 @@
       <b-sidebar id="sidebar-backdrop" :title="msg" backdrop-variant="dark" backdrop shadow>
         <Sidebar />
       </b-sidebar>
+
+      <b-modal id="modal-checkout" title="Checkout Success!" centered hide-footer>
+        <b-row>
+          <b-col cols="6">
+            <p>Checkout</p>
+          </b-col>
+          <b-col cols="6" style="text-align: end;">
+            <p>Receipt no: #{{invoice}}</p>
+          </b-col>
+        </b-row>
+        <p style="margin-bottom: 50px; font-size: 13px;">Cashier: {{user}}</p>
+        <b-row v-for="(value, index) in cart" :key="index" class="checkout-list">
+          <b-col cols="6">
+            <p>{{value.product_name}} {{value.qty}}x</p>
+          </b-col>
+          <b-col cols="6" style="text-align: end;">
+            <p>Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="6">
+            <p>Tax 10%</p>
+          </b-col>
+          <b-col cols="6" style="text-align: end;">
+            <p>Rp. {{(countTotal() * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+          </b-col>
+          <b-col cols="12" style="text-align: end;">
+            <p>Total: Rp. {{(countTotal() + (countTotal() * 0.1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+          </b-col>
+          <b-col cols="12">
+            <p>Payment: Cash</p>
+          </b-col>
+          <b-button
+            class="checkout-btn"
+            variant="info"
+            style="background: #57cad5;"
+            @click="refresh()"
+          >Print</b-button>
+        </b-row>
+      </b-modal>
     </b-container>
   </div>
 </template>
@@ -160,9 +211,11 @@ export default {
       sort: '',
       product: [],
       cart: [],
+      setOrder: [],
       img: require('@/assets/img/blank-product.jpg'),
       addCartBtn: [],
-      showPagination: true
+      showPagination: true,
+      invoice: null
     }
   },
   created() {
@@ -291,6 +344,30 @@ export default {
         total += this.cart[i].product_price * this.cart[i].qty
       }
       return total
+    },
+    postOrder(data) {
+      for (let i = 0; i < data.length; i++) {
+        const dataOrder = {
+          product_id: data[i].product_id,
+          qty: data[i].qty
+        }
+        this.setOrder = [...this.setOrder, dataOrder]
+      }
+      axios
+        .post('http://127.0.0.1:3001/order', this.setOrder)
+        .then((response) => {
+          this.invoice = response.data.data.invoice
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    cancelCart() {
+      this.cart = []
+    },
+    refresh() {
+      location.reload()
+      return false
     }
   },
   computed: {
