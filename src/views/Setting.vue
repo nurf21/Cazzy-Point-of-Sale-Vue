@@ -16,7 +16,7 @@
                       style="border: none; background-color: #82DE3A"
                       v-b-modal.modal-1
                       @click="modalTitle = 'Add Product'"
-                    >Create</b-button>
+                    >Add Product</b-button>
                   </b-col>
                   <b-col lg="6" class="my-1">
                     <b-form-group>
@@ -62,42 +62,25 @@
               <div style="width: 100%">
                 <b-row>
                   <b-col lg="6" class="my-1">
-                    <b-form-group>
-                      <b-input-group size="sm">
-                        <b-form-input v-model="filter" type="search" placeholder="Type to Search"></b-form-input>
-                        <b-input-group-append>
-                          <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
-                        </b-input-group-append>
-                      </b-input-group>
-                    </b-form-group>
+                    <b-button
+                      style="border: none; background-color: #82DE3A"
+                      v-b-modal.modal-2
+                      @click="modalTitle = 'Add Category'"
+                    >Add Category</b-button>
                   </b-col>
                 </b-row>
                 <b-table
-                  id="product-table"
                   striped
                   hover
-                  :items="productItem"
-                  :fields="fields"
-                  :filter="filter"
-                  :filterIncludedFields="['Name']"
-                  :per-page="limit"
-                  :current-page="page"
+                  :items="category"
+                  :fields="fieldsCategory"
                   style="text-align: center"
                 >
-                  <template #cell(actions)>
-                    <b-button class="mr-1">Edit</b-button>
-                    <b-button class="ml-1">Delete</b-button>
+                  <template #cell(actions)="data">
+                    <b-button class="mr-1" v-b-modal.modal-2 @click="setCategory(data)">Edit</b-button>
+                    <b-button class="ml-1" @click="deleteCategory(data)">Delete</b-button>
                   </template>
                 </b-table>
-                <b-pagination
-                  v-model="page"
-                  v-show="!filter"
-                  :total-rows="totalData"
-                  :per-page="limit"
-                  align="center"
-                  class="my-0"
-                  aria-controls="product-table"
-                ></b-pagination>
               </div>
             </b-tab>
           </b-tabs>
@@ -134,6 +117,17 @@
       </b-form>
     </b-modal>
 
+    <b-modal id="modal-2" :title="modalTitle" hide-footer>
+      <b-form @submit="addCategory">
+        <b-form-group label-cols-sm="3" label="Name" label-for="nested-name">
+          <b-form-input id="nested-name" v-model="formCategory.category_name"></b-form-input>
+        </b-form-group>
+
+        <b-button type="submit" variant="primary" v-show="!isUpdate">Submit</b-button>
+        <b-button type="button" variant="primary" v-show="isUpdate" @click="patchCategory()">Update</b-button>
+      </b-form>
+    </b-modal>
+
     <b-sidebar id="sidebar-backdrop" :title="msg" backdrop-variant="dark" backdrop shadow>
       <Sidebar />
     </b-sidebar>
@@ -161,6 +155,9 @@ export default {
         product_name: '',
         product_price: '',
         product_status: 1
+      },
+      formCategory: {
+        category_name: ''
       },
       fields: [
         {
@@ -193,11 +190,20 @@ export default {
         },
         { key: 'actions', label: 'Actions' }
       ],
+      fieldsCategory: [
+        { key: 'category_id', label: 'ID' },
+        { key: 'category_name', label: 'Name' },
+        { key: 'category_created_at', label: 'Created' },
+        { key: 'category_updated_at', label: 'Updated' },
+        { key: 'actions', label: 'Actions' }
+      ],
       filter: null,
       product: [],
       category: [],
       productItem: [],
+      categoryItem: [],
       productId: null,
+      categoryId: null,
       isUpdate: false,
       page: 1,
       totalData: 0,
@@ -235,6 +241,10 @@ export default {
         .get('http://127.0.0.1:3001/category')
         .then((response) => {
           this.category = response.data.data
+          this.category.map(value => {
+            value.category_created_at = value.category_created_at.slice(0, 10)
+            value.category_updated_at = value.category_updated_at.slice(0, 10)
+          })
         })
         .catch((error) => {
           console.log(error)
@@ -244,7 +254,7 @@ export default {
       axios
         .post('http://127.0.0.1:3001/product', this.form)
         .then((response) => {
-          this.get_product()
+          this.getProduct()
         })
         .catch((error) => {
           console.log(error)
@@ -252,17 +262,37 @@ export default {
     },
     setProduct(data) {
       this.isUpdate = true
+      this.modalTitle = 'Edit Product'
       this.form = {
         product_name: data.item.Name,
         product_image: data.item.Image,
         product_price: data.item.price,
         category_id: data.item.category_id
       }
-      this.product_id = data.item.ID
+      this.productId = data.item.ID
+    },
+    setCategory(data) {
+      this.isUpdate = true
+      this.modalTitle = 'Edit Category'
+      this.formCategory = {
+        category_name: data.item.category_name
+      }
+      this.categoryId = data.item.category_id
     },
     patchProduct() {
       axios
-        .patch(`http://127.0.0.1:3001/product/${this.product_id}`, this.form)
+        .patch(`http://127.0.0.1:3001/product/${this.productId}`, this.form)
+        .then((response) => {
+          this.isUpdate = false
+          location.reload()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    patchCategory() {
+      axios
+        .patch(`http://127.0.0.1:3001/category/${this.categoryId}`, this.formCategory)
         .then((response) => {
           this.isUpdate = false
           location.reload()
@@ -272,12 +302,32 @@ export default {
         })
     },
     deleteProduct(data) {
-      this.product_id = data.item.ID
+      this.productId = data.item.ID
       axios
-        .delete(`http://127.0.0.1:3001/product/${this.product_id}`)
+        .delete(`http://127.0.0.1:3001/product/${this.productId}`)
         .then((response) => {
-          this.isUpdate = false
           location.reload()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    deleteCategory(data) {
+      this.categoryId = data.item.category_id
+      axios
+        .delete(`http://127.0.0.1:3001/category/${this.categoryId}`)
+        .then((response) => {
+          location.reload()
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    addCategory() {
+      axios
+        .post('http://127.0.0.1:3001/category', this.formCategory)
+        .then((response) => {
+          this.getCategory()
         })
         .catch((error) => {
           console.log(error)
