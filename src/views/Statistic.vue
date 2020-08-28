@@ -93,7 +93,22 @@
             </b-dropdown>
           </b-col>
           <div style="width: 100%">
-            <b-table striped hover :items="items" style="text-align: center"></b-table>
+            <b-table
+              id="my-table"
+              striped
+              hover
+              :items="items"
+              :per-page="perPage"
+              :current-page="currentPage"
+              style="text-align: center"
+            ></b-table>
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="rows"
+              :per-page="perPage"
+              align="center"
+              aria-controls="my-table"
+            ></b-pagination>
           </div>
         </b-row>
       </b-col>
@@ -122,6 +137,8 @@ export default {
       user: 'Cashier #1',
       month: 'Month',
       text: 'Today',
+      perPage: 5,
+      currentPage: 1,
       items: [],
       chartData: [],
       currDate: new Date().toJSON().slice(0, 10),
@@ -161,7 +178,7 @@ export default {
               INVOICES: `#${value.history_invoice}`,
               CASHIER: this.user,
               DATE: value.history_created_at.slice(0, 10),
-              ORDERS: value.orders.map(item => item.product_name).join(', '),
+              ORDERS: value.orders.map(item => item.product_name.concat(` ${item.order_qty}x`)).join(', '),
               AMOUNT: `Rp. ${value.history_subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
             }
             this.items = [...this.items, setItem]
@@ -183,7 +200,7 @@ export default {
               INVOICES: `#${value.history_invoice}`,
               CASHIER: this.user,
               DATE: value.history_created_at.slice(0, 10),
-              ORDERS: value.orders.map(item => item.product_name).join(', '),
+              ORDERS: value.orders.map(item => item.product_name.concat(` ${item.order_qty}x`)).join(', '),
               AMOUNT: `Rp. ${value.history_subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
             }
             this.items = [...this.items, setItem]
@@ -205,7 +222,7 @@ export default {
               INVOICES: `#${value.history_invoice}`,
               CASHIER: this.user,
               DATE: value.history_created_at.slice(0, 10),
-              ORDERS: value.orders.map(item => item.product_name).join(', '),
+              ORDERS: value.orders.map(item => item.product_name.concat(` ${item.order_qty}x`)).join(', '),
               AMOUNT: `Rp. ${value.history_subtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
             }
             this.items = [...this.items, setItem]
@@ -392,6 +409,9 @@ export default {
       get() {
         return `${this.greet}, ${this.user} !`
       }
+    },
+    rows() {
+      return this.items.length
     }
   }
 }
