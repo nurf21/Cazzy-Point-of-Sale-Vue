@@ -262,6 +262,14 @@ button {
   width: 100%;
 }
 
+.setting-content {
+  background: rgba(190, 195, 202, 0.3);
+}
+
+.tab {
+  margin: 30px auto;
+}
+
 @media (max-width: 320.98px) {
   .container-menu {
     padding: 0 1.3rem;

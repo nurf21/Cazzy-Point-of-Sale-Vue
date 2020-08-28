@@ -111,7 +111,7 @@ import Sidebar from '@/components/Sidebar'
 import Header from '@/components/Header'
 
 export default {
-  name: 'Home',
+  name: 'Statistic',
   components: {
     Sidebar,
     Header
