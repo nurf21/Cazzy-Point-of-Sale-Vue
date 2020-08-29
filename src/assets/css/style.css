@@ -1,7 +1,8 @@
+/* Header */
 .header {
   height: 100px;
   background: #ffffff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.274);
 }
 
 /* Cart Header */
@@ -58,7 +59,7 @@
 
 .add-cart:hover,
 .add-cart:focus {
-  background-color: cadetblue;
+  background-color: #5fe7ff;
 }
 
 /* Cart List */
@@ -146,10 +147,7 @@
   font-size: 25px;
 }
 
-.modal-header {
-  border-bottom: 0 !important;
-}
-
+/* Modal */
 .modal-body p {
   font-weight: bold;
 }
@@ -163,6 +161,7 @@
 
 button {
   background: #57cad5;
+  border: 0;
 }
 
 /* Statistic */
@@ -295,6 +294,61 @@ button {
   .option input {
     width: 75%;
     margin-right: 10px;
+  }
+
+  .name-cart,
+  .price-cart,
+  .checkout p {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
+  .checkout span {
+    font-size: 14px;
+  }
+
+  .plus-minus {
+    width: 35px;
+    height: 35px;
+    margin-top: 5px;
+  }
+
+  .qty {
+    width: 35px;
+    height: 35px;
+    margin-top: 5px;
+  }
+
+  .checkout-btn,
+  .cancel-btn {
+    height: 45px;
+    margin: 10px 20px;
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1023px) and (max-width: 1260px) {
+  .name-cart,
+  .price-cart,
+  .checkout p {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
+  .checkout span {
+    font-size: 14px;
+  }
+
+  .plus-minus {
+    width: 35px;
+    height: 35px;
+    margin-top: 5px;
+  }
+
+  .qty {
+    width: 35px;
+    height: 35px;
+    margin-top: 5px;
   }
 }
 

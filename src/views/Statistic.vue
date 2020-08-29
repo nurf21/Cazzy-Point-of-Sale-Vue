@@ -95,6 +95,7 @@
           <div style="width: 100%">
             <b-table
               id="my-table"
+              responsive
               striped
               hover
               :items="items"

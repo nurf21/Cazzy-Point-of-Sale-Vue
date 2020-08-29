@@ -97,10 +97,10 @@
         <b-col cols="12" lg="4" class="cart-list" v-else>
           <div class="cart-overflow">
             <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
-              <b-col cols="4">
+              <b-col cols="3" md="4">
                 <b-img :src="img" fluid />
               </b-col>
-              <b-col cols="5" style="padding: 0">
+              <b-col cols="5" md="5" style="padding: 0">
                 <p class="name-cart">{{value.product_name}}</p>
                 <b-input-group>
                   <b-button class="plus-minus" variant="success" @click="minus(value)">-</b-button>
@@ -108,7 +108,7 @@
                   <b-button class="plus-minus" variant="success" @click="plus(value)">+</b-button>
                 </b-input-group>
               </b-col>
-              <b-col cols="3" style="padding: 0" align-self="end">
+              <b-col cols="4" md="3" style="padding: 0" align-self="end">
                 <p
                   class="price-cart"
                 >Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
@@ -137,7 +137,7 @@
               class="cancel-btn"
               variant="danger"
               style="background: #F24F8A;"
-              @click="cancelCart()"
+              @click="cart = []"
             >Cancel</b-button>
           </b-row>
         </b-col>
@@ -363,9 +363,6 @@ export default {
         .catch((error) => {
           console.log(error)
         })
-    },
-    cancelCart() {
-      this.cart = []
     },
     refresh() {
       location.reload()

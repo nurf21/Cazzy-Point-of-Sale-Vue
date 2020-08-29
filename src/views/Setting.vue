@@ -13,15 +13,20 @@
                 <b-row>
                   <b-col lg="6" class="my-1">
                     <b-button
-                      style="border: none; background-color: #82DE3A"
+                      style="background-color: #82DE3A"
                       v-b-modal.modal-1
-                      @click="modalTitle = 'Add Product'"
+                      @click="addButton()"
                     >Add Product</b-button>
                   </b-col>
                   <b-col lg="6" class="my-1">
                     <b-form-group>
                       <b-input-group size="sm">
-                        <b-form-input v-model="filter" type="search" placeholder="Type to Search"></b-form-input>
+                        <b-form-input
+                          v-model="filter"
+                          type="search"
+                          placeholder="Type to Search"
+                          @click="page = 1"
+                        ></b-form-input>
                         <b-input-group-append>
                           <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
                         </b-input-group-append>
@@ -31,6 +36,7 @@
                 </b-row>
                 <b-table
                   id="product-table"
+                  responsive
                   striped
                   hover
                   :items="productItem"
@@ -42,8 +48,18 @@
                   style="text-align: center"
                 >
                   <template #cell(actions)="data">
-                    <b-button class="mr-1" v-b-modal.modal-1 @click="setProduct(data)">Edit</b-button>
-                    <b-button class="ml-1" @click="deleteProduct(data)">Delete</b-button>
+                    <b-button
+                      class="mr-1"
+                      variant="info"
+                      v-b-modal.modal-1
+                      @click="setProduct(data)"
+                    >Edit</b-button>
+                    <b-button
+                      class="ml-1"
+                      v-b-modal.modal-3
+                      style="background: #d34d4d"
+                      @click="showDelBoxProd(data)"
+                    >Delete</b-button>
                   </template>
                 </b-table>
                 <b-pagination
@@ -63,22 +79,33 @@
                 <b-row>
                   <b-col lg="6" class="my-1">
                     <b-button
+                      class="mb-2"
                       style="border: none; background-color: #82DE3A"
                       v-b-modal.modal-2
-                      @click="modalTitle = 'Add Category'"
+                      @click="addCatButton()"
                     >Add Category</b-button>
                   </b-col>
                 </b-row>
                 <b-table
                   striped
+                  responsive
                   hover
                   :items="category"
                   :fields="fieldsCategory"
                   style="text-align: center"
                 >
                   <template #cell(actions)="data">
-                    <b-button class="mr-1" v-b-modal.modal-2 @click="setCategory(data)">Edit</b-button>
-                    <b-button class="ml-1" @click="deleteCategory(data)">Delete</b-button>
+                    <b-button
+                      class="mr-1"
+                      v-b-modal.modal-2
+                      @click="setCategory(data)"
+                      variant="info"
+                    >Edit</b-button>
+                    <b-button
+                      class="ml-1"
+                      style="background: #d34d4d"
+                      @click="showDelBoxCat(data)"
+                    >Delete</b-button>
                   </template>
                 </b-table>
               </div>
@@ -140,7 +167,7 @@ import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 
 export default {
-  name: 'Home',
+  name: 'Setting',
   components: {
     Header,
     Sidebar
@@ -160,10 +187,10 @@ export default {
         category_name: ''
       },
       fields: [
-        {
-          key: 'ID',
-          sortable: true
-        },
+        // {
+        //   key: 'ID',
+        //   sortable: true
+        // },
         {
           key: 'Name',
           sortable: true
@@ -191,7 +218,7 @@ export default {
         { key: 'actions', label: 'Actions' }
       ],
       fieldsCategory: [
-        { key: 'category_id', label: 'ID' },
+        // { key: 'category_id', label: 'ID' },
         { key: 'category_name', label: 'Name' },
         { key: 'category_created_at', label: 'Created' },
         { key: 'category_updated_at', label: 'Updated' },
@@ -250,6 +277,23 @@ export default {
           console.log(error)
         })
     },
+    addButton() {
+      this.form = {
+        category_id: '',
+        product_name: '',
+        product_price: '',
+        product_status: 1
+      }
+      this.modalTitle = 'Add Product'
+      this.isUpdate = false
+    },
+    addCatButton() {
+      this.formCategory = {
+        category_name: ''
+      }
+      this.modalTitle = 'Add Category'
+      this.isUpdate = false
+    },
     addProduct() {
       axios
         .post('http://127.0.0.1:3001/product', this.form)
@@ -298,6 +342,48 @@ export default {
           location.reload()
         })
         .catch((error) => {
+          console.log(error)
+        })
+    },
+    showDelBoxProd(data) {
+      this.$bvModal.msgBoxConfirm(`Are you sure want to delete ${data.item.Name} ?`, {
+        title: 'Delete Product',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+        .then(value => {
+          if (value === true) {
+            this.deleteProduct(data)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+    showDelBoxCat(data) {
+      this.$bvModal.msgBoxConfirm(`Are you sure want to delete ${data.item.category_name} ?`, {
+        title: 'Delete Category',
+        size: 'sm',
+        buttonSize: 'sm',
+        okVariant: 'danger',
+        okTitle: 'YES',
+        cancelTitle: 'NO',
+        footerClass: 'p-2',
+        hideHeaderClose: false,
+        centered: true
+      })
+        .then(value => {
+          if (value === true) {
+            this.deleteCategory(data)
+          }
+        })
+        .catch(error => {
           console.log(error)
         })
     },
