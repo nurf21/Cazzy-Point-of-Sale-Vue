@@ -245,6 +245,7 @@ export default {
     searchProduct() {
       this.$router.push(`?q=${this.keyword}`)
       if (this.keyword === '') {
+        this.page = 1
         this.getProduct()
         this.showPagination = true
       } else {
