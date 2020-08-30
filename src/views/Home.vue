@@ -210,7 +210,7 @@ export default {
       page: 1,
       limit: 6,
       keyword: '',
-      sort: '',
+      sort: 'product_id',
       product: [],
       cart: [],
       setOrder: [],
@@ -222,6 +222,9 @@ export default {
   },
   created() {
     this.getProduct()
+  },
+  updated() {
+    this.page = this.$route.query.p
   },
   methods: {
     scrollToTop() {
@@ -240,6 +243,7 @@ export default {
         })
     },
     searchProduct() {
+      this.$router.push(`?q=${this.keyword}`)
       if (this.keyword === '') {
         this.getProduct()
         this.showPagination = true
@@ -263,6 +267,7 @@ export default {
       this.sort = 'category_id'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     sortNameAsc() {
@@ -270,6 +275,7 @@ export default {
       this.sort = 'product_name ASC'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     sortNameDesc() {
@@ -277,6 +283,7 @@ export default {
       this.sort = 'product_name DESC'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     sortDateAsc() {
@@ -284,6 +291,7 @@ export default {
       this.sort = 'product_created_at ASC'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     sortDateDesc() {
@@ -291,6 +299,7 @@ export default {
       this.sort = 'product_created_at DESC'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     sortPriceAsc() {
@@ -298,6 +307,7 @@ export default {
       this.sort = 'product_price ASC'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     sortPriceDesc() {
@@ -305,6 +315,7 @@ export default {
       this.sort = 'product_price DESC'
       this.page = 1
       this.showPagination = true
+      this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
     addCart(data) {
@@ -336,6 +347,7 @@ export default {
       this.page = value
       this.getProduct()
       this.scrollToTop()
+      this.$router.push(`?ob=${this.sort}&p=${value}`)
     },
     cartCount() {
       return this.cart.length
