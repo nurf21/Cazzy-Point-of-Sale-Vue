@@ -30,6 +30,11 @@
 
 .menu-row {
   margin: 20px auto;
+  max-height: 475px;
+  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .product-list {
@@ -100,7 +105,7 @@
 }
 
 .cart-overflow {
-  max-height: 450px;
+  max-height: 290px;
   overflow: scroll;
   overflow-y: auto;
   overflow-x: hidden;

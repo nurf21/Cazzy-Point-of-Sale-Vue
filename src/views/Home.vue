@@ -147,7 +147,7 @@
         <Sidebar />
       </b-sidebar>
 
-      <b-modal id="modal-checkout" title="Checkout Success!" centered hide-footer>
+      <b-modal id="modal-checkout" title="Checkout Success!" hide-footer centered>
         <b-row>
           <b-col cols="6">
             <p>Checkout</p>
@@ -182,7 +182,7 @@
             class="checkout-btn"
             variant="info"
             style="background: #57cad5;"
-            @click="refresh()"
+            @click="endCheck()"
           >Print</b-button>
         </b-row>
       </b-modal>
@@ -377,9 +377,17 @@ export default {
           console.log(error)
         })
     },
-    refresh() {
-      location.reload()
-      return false
+    endCheck() {
+      this.$bvModal.hide('modal-checkout')
+      this.cart = []
+      this.makeToast('success')
+    },
+    makeToast(variant = null) {
+      this.$bvToast.toast('Checkout Printed', {
+        title: 'Success',
+        variant: variant,
+        solid: true
+      })
     }
   },
   computed: {
