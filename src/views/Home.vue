@@ -232,7 +232,7 @@ export default {
     },
     getProduct() {
       axios
-        .get(`http://127.0.0.1:3001/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
+        .get(`${process.env.VUE_APP_IP}/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
         .then((response) => {
           this.keyword = ''
           this.product = response.data.data
@@ -250,7 +250,7 @@ export default {
         this.showPagination = true
       } else {
         axios
-          .get(`http://127.0.0.1:3001/product/search?keyword=${this.keyword}`)
+          .get(`${process.env.VUE_APP_IP}/product/search?keyword=${this.keyword}`)
           .then((response) => {
             this.showPagination = false
             this.sortText = 'Sort'
@@ -369,7 +369,7 @@ export default {
         this.setOrder = [...this.setOrder, dataOrder]
       }
       axios
-        .post('http://127.0.0.1:3001/order', this.setOrder)
+        .post(`${process.env.VUE_APP_IP}/order`, this.setOrder)
         .then((response) => {
           this.invoice = response.data.data.invoice
         })

@@ -171,7 +171,7 @@ export default {
     getHistoryToday() {
       this.items = []
       axios
-        .get('http://127.0.0.1:3001/history/today')
+        .get(`${process.env.VUE_APP_IP}/history/today`)
         .then(response => {
           this.history = response.data.data
           this.history.map((value) => {
@@ -193,7 +193,7 @@ export default {
     getHistoryWeek() {
       this.items = []
       axios
-        .get('http://127.0.0.1:3001/history/week')
+        .get(`${process.env.VUE_APP_IP}/history/week`)
         .then(response => {
           this.history = response.data.data
           this.history.map((value) => {
@@ -215,7 +215,7 @@ export default {
     getHistoryMonth() {
       this.items = []
       axios
-        .get('http://127.0.0.1:3001/history/month')
+        .get(`${process.env.VUE_APP_IP}/history/month`)
         .then(response => {
           this.history = response.data.data
           this.history.map((value) => {
@@ -236,7 +236,7 @@ export default {
     },
     getDataChart() {
       axios
-        .get(`http://127.0.0.1:3001/history/chart?date=${this.currDate}`)
+        .get(`${process.env.VUE_APP_IP}/history/chart?date=${this.currDate}`)
         .then(response => {
           const setChart = response.data.data
           for (let i = 0; i < setChart.length; i++) {
@@ -249,7 +249,7 @@ export default {
     },
     getTodayIncome() {
       axios
-        .get(`http://127.0.0.1:3001/history/income?date=${this.currDate}`)
+        .get(`${process.env.VUE_APP_IP}/history/income?date=${this.currDate}`)
         .then(response => {
           this.todayIncome = response.data.data
         })
@@ -259,7 +259,7 @@ export default {
     },
     getPrevIncome() {
       axios
-        .get(`http://127.0.0.1:3001/history/income?date=${this.prevDate}`)
+        .get(`${process.env.VUE_APP_IP}/history/income?date=${this.prevDate}`)
         .then(response => {
           this.prevIncome = response.data.data
         })
@@ -269,7 +269,7 @@ export default {
     },
     getYearIncome() {
       axios
-        .get(`http://127.0.0.1:3001/history/incomeyear?date=${this.currDate}`)
+        .get(`${process.env.VUE_APP_IP}/history/incomeyear?date=${this.currDate}`)
         .then(response => {
           this.yearIncome = response.data.data
         })
@@ -279,7 +279,7 @@ export default {
     },
     getPrevYearIncome() {
       axios
-        .get(`http://127.0.0.1:3001/history/incomeyear?date=${this.prevYear}`)
+        .get(`${process.env.VUE_APP_IP}/history/incomeyear?date=${this.prevYear}`)
         .then(response => {
           this.prevYearIncome = response.data.data
         })
@@ -289,7 +289,7 @@ export default {
     },
     getCountHistoryWeek() {
       axios
-        .get(`http://127.0.0.1:3001/history/count?date=${this.currDate}`)
+        .get(`${process.env.VUE_APP_IP}/history/count?date=${this.currDate}`)
         .then(response => {
           this.countThisWeek = response.data.data
         })
@@ -299,7 +299,7 @@ export default {
     },
     getCountHistoryLastWeek() {
       axios
-        .get(`http://127.0.0.1:3001/history/count?date=${this.prevWeek}`)
+        .get(`${process.env.VUE_APP_IP}/history/count?date=${this.prevWeek}`)
         .then(response => {
           this.countPrevWeek = response.data.data
         })
