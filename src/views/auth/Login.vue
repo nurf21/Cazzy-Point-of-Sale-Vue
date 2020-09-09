@@ -3,7 +3,7 @@
     <div class="vertical-center">
       <div class="inner-block">
         <div class="vue-template">
-          <form @submit.prevent="onSubmit" @reset.prevent="onReset">
+          <form @submit.prevent="onSubmit">
             <h3>Welcome !</h3>
 
             <div class="form-group">
@@ -27,9 +27,12 @@
             </div>
 
             <button type="submit" class="btn btn-dark btn-lg btn-block">Login</button>
+            <p class="warning text-center mt-2 mb-4" v-show="isError">{{ error() }}</p>
             <p class="sign-up text-center mt-2 mb-4">
               Not registered?
-              <a href="#">Create an account</a>
+              <router-link to="/register">
+                <span>Create an account</span>
+              </router-link>
             </p>
           </form>
         </div>
@@ -39,24 +42,27 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
   data() {
     return {
       form: {
-        email: '',
-        password: ''
-      }
+        user_email: '',
+        user_password: ''
+      },
+      isError: false
     }
   },
   methods: {
+    ...mapGetters({ error: 'getError' }),
     ...mapActions(['login']),
     onSubmit() {
       this.login(this.form).then((result) => {
         this.$router.push('/')
       }).catch((error) => {
+        this.isError = true
         console.log(error)
       })
     }
@@ -116,6 +122,14 @@ label {
   font-weight: bold;
 }
 
+.warning {
+  text-align: center;
+  font-size: 13px;
+  padding-top: 10px;
+  color: red;
+  margin: 0;
+}
+
 .sign-up,
 .sign-up a {
   text-align: center;
@@ -125,7 +139,13 @@ label {
   margin: 0;
 }
 
-.sign-up a {
+.sign-up span {
   color: #2554FF;
+}
+
+@media (max-width: 480px) {
+  .inner-block {
+    width: 100%;
+  }
 }
 </style>

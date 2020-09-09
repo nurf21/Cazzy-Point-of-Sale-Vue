@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import Statistic from '../views/Statistic.vue'
 import Setting from '../views/Setting.vue'
 import Login from '../views/auth/Login.vue'
+import Register from '../views/auth/Register.vue'
+import Product from '../views/main/Product.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -28,9 +30,21 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/Login',
+    path: '/product',
+    name: 'Product',
+    component: Product,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/login',
     name: 'Login',
     component: Login,
+    meta: { requiresVisitor: true }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
     meta: { requiresVisitor: true }
   }
 ]

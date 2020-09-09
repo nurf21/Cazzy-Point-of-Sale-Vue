@@ -26,11 +26,12 @@
 /* Product List */
 .container-menu {
   background: rgba(190, 195, 202, 0.3);
+  min-height: 87vh;
 }
 
 .menu-row {
   margin: 20px auto;
-  max-height: 475px;
+  max-height: 570px;
   overflow: scroll;
   overflow-y: auto;
   overflow-x: hidden;
