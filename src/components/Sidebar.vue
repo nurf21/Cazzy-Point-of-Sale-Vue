@@ -1,7 +1,9 @@
 <template>
-  <b-container fluid>
-    <b-img :src="avatar" class="avatar" fluid />
-    <h5 class="user">{{ user }}</h5>
+  <b-sidebar id="sidebar-backdrop" :title="greet" backdrop-variant="dark" backdrop shadow>
+    <b-img :src="url + '/' + user.user_image" class="avatar" fluid />
+    <router-link to="/profile" class="user">
+      <p>{{ user.user_name }}</p>
+    </router-link>
     <hr />
     <b-navbar variant="faded" type="light">
       <router-link to="/">
@@ -32,27 +34,44 @@
       </router-link>
     </b-navbar>
     <b-navbar variant="faded" type="light">
-      <b-navbar-brand>
+      <b-navbar-brand @click="handleLogout" class="logout">
         <img src="@/assets/img/settings.png" class="mr-2 d-inline-block align-top" alt="setting" />
-        <a class="logout" @click="handleLogout">Logout</a>
+        Logout
       </b-navbar-brand>
     </b-navbar>
-  </b-container>
+  </b-sidebar>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Sidebar',
   data() {
     return {
-      user: 'Cashier #1',
-      avatar: require('@/assets/img/blank.jpg')
+      user: {},
+      url: process.env.VUE_APP_BASE_URL
     }
   },
   methods: {
-    ...mapActions({ handleLogout: 'logout' })
+    ...mapActions({ handleLogout: 'logout', getUserData: 'userData' }),
+    ...mapGetters(['getUser'])
+  },
+  computed: {
+    greet: {
+      get() {
+        return `Welcome, ${this.getUser().user_name}!`
+      }
+    }
+  },
+  created() {
+    this.getUserData(this.getUser().user_id).then(result => {
+      this.user = result.data[0]
+    }).catch(error => {
+      console.log(error)
+      alert('Please login first')
+      this.handleLogout()
+    })
   }
 }
 </script>
@@ -60,11 +79,13 @@ export default {
 <style scoped>
 .avatar {
   border-radius: 100%;
-  padding: 1.25rem;
+  padding: 10px 55px 10px 55px;
 }
 .user {
   text-align: center;
-  margin: 0;
+  font-size: 20px;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.9);;
 }
 .navbar {
   margin: 10px auto;

@@ -1,193 +1,191 @@
 <template>
-  <div class="home">
-    <b-container fluid>
-      <b-row>
-        <b-col cols="12" lg="8" class="header">
-          <Header text="Menu" />
-        </b-col>
+  <b-container fluid>
+    <b-row>
+      <b-col cols="12" lg="8" class="header">
+        <Header text="Menu" />
+      </b-col>
 
-        <b-col cols="12" lg="4" class="cart-header">
-          <h2>
-            Cart
-            <b-badge>{{ cartCount() }}</b-badge>
-          </h2>
-        </b-col>
-      </b-row>
+      <b-col cols="12" lg="4" class="cart-header">
+        <h2>
+          Cart
+          <b-badge>{{ cartCount() }}</b-badge>
+        </h2>
+      </b-col>
+    </b-row>
 
-      <b-row>
-        <b-col cols="12" lg="8" class="container-menu">
-          <b-row class="menu-row">
-            <b-col cols="12" class="option">
-              <b-form v-on:submit.prevent="searchProduct" inline>
-                <b-input placeholder="Enter keyword" v-model="keyword"></b-input>
-                <b-button variant="info" type="submit" class="ml-md-2">Search</b-button>
+    <b-row>
+      <b-col cols="12" lg="8" class="container-menu">
+        <b-row class="menu-row">
+          <b-col cols="12" class="option">
+            <b-form v-on:submit.prevent="searchProduct" inline>
+              <b-input placeholder="Enter keyword" v-model="keyword"></b-input>
+              <b-button variant="info" type="submit" class="ml-md-2">Search</b-button>
 
-                <b-dropdown id="sort" :text="sortText" class="m-2 sort-btn" variant="info">
-                  <b-dropdown-item-button @click="sortCategory()" active>Category</b-dropdown-item-button>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-group id="dropdown-group-1" header="Name">
-                    <b-dropdown-item-button @click="sortNameAsc()">A-Z</b-dropdown-item-button>
-                    <b-dropdown-item-button @click="sortNameDesc()">Z-A</b-dropdown-item-button>
-                  </b-dropdown-group>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-group id="dropdown-group-2" header="Date">
-                    <b-dropdown-item-button @click="sortDateAsc()">Oldest</b-dropdown-item-button>
-                    <b-dropdown-item-button @click="sortDateDesc()">Newest</b-dropdown-item-button>
-                  </b-dropdown-group>
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-group id="dropdown-group-3" header="Price">
-                    <b-dropdown-item-button @click="sortPriceAsc()">Lowest</b-dropdown-item-button>
-                    <b-dropdown-item-button @click="sortPriceDesc()">Highest</b-dropdown-item-button>
-                  </b-dropdown-group>
-                </b-dropdown>
-              </b-form>
-            </b-col>
+              <b-dropdown id="sort" :text="sortText" class="m-2 sort-btn" variant="info">
+                <b-dropdown-item-button @click="sortCategory()" active>Category</b-dropdown-item-button>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-group id="dropdown-group-1" header="Name">
+                  <b-dropdown-item-button @click="sortNameAsc()">A-Z</b-dropdown-item-button>
+                  <b-dropdown-item-button @click="sortNameDesc()">Z-A</b-dropdown-item-button>
+                </b-dropdown-group>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-group id="dropdown-group-2" header="Date">
+                  <b-dropdown-item-button @click="sortDateAsc()">Oldest</b-dropdown-item-button>
+                  <b-dropdown-item-button @click="sortDateDesc()">Newest</b-dropdown-item-button>
+                </b-dropdown-group>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-group id="dropdown-group-3" header="Price">
+                  <b-dropdown-item-button @click="sortPriceAsc()">Lowest</b-dropdown-item-button>
+                  <b-dropdown-item-button @click="sortPriceDesc()">Highest</b-dropdown-item-button>
+                </b-dropdown-group>
+              </b-dropdown>
+            </b-form>
+          </b-col>
 
-            <b-col
-              cols="12"
-              lg="4"
-              md="6"
-              v-for="(value, index) in product"
-              :key="index"
-              class="product-list"
-            >
-              <b-img :src="img" fluid />
-              <p>{{ value.product_name }}</p>
-              <p>
-                <strong>
-                  Rp.
-                  {{ value.product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') }}
-                </strong>
-              </p>
-              <b-button
-                class="add-cart"
-                variant="info"
-                @click="addCart(value)"
-                v-if="!checkCart(value)"
-              >Add to cart</b-button>
-              <b-button
-                class="remove-cart"
-                variant="danger"
-                @click="removeCart(value)"
-                v-else
-              >Remove from cart</b-button>
-            </b-col>
-          </b-row>
-
-          <div class="mt-3">
-            <b-pagination
-              v-model="page"
-              :total-rows="totalData"
-              :per-page="limit"
-              @change="pageChange"
-              v-show="showPagination"
-            ></b-pagination>
-          </div>
-        </b-col>
-
-        <b-col cols="12" lg="4" class="cart-list-empty" v-if="cartCount() < 1">
-          <img src="@/assets/img/empty-cart.png" alt />
-          <p>
-            Your cart is empty
-            <br />
-            <span>Please add some items from the menu</span>
-          </p>
-        </b-col>
-
-        <b-col cols="12" lg="4" class="cart-list" v-else>
-          <div class="cart-overflow">
-            <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
-              <b-col cols="3" md="4">
-                <b-img :src="img" fluid />
-              </b-col>
-              <b-col cols="5" md="5" style="padding: 0">
-                <p class="name-cart">{{value.product_name}}</p>
-                <b-input-group>
-                  <b-button class="plus-minus" variant="success" @click="minus(value)">-</b-button>
-                  <input type="text" v-model="value.qty" class="qty" />
-                  <b-button class="plus-minus" variant="success" @click="plus(value)">+</b-button>
-                </b-input-group>
-              </b-col>
-              <b-col cols="4" md="3" style="padding: 0" align-self="end">
-                <p
-                  class="price-cart"
-                >Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
-              </b-col>
-            </b-row>
-          </div>
-          <b-row class="checkout">
-            <b-col cols="6">
-              <p>
-                Total :
-                <br />
-                <span>*Tax not included</span>
-              </p>
-            </b-col>
-            <b-col cols="6" style="text-align: end;">
-              <p>Rp. {{countTotal().toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}*</p>
-            </b-col>
+          <b-col
+            cols="12"
+            lg="4"
+            md="6"
+            v-for="(value, index) in product"
+            :key="index"
+            class="product-list"
+          >
+            <b-img :src="'http://127.0.0.1:3001/' + value.product_image" fluid />
+            <p>{{ value.product_name }}</p>
+            <p>
+              <strong>
+                Rp.
+                {{ value.product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') }}
+              </strong>
+            </p>
             <b-button
-              class="checkout-btn"
+              class="add-cart"
               variant="info"
-              style="background: #57cad5;"
-              @click="postOrder(cart)"
-              v-b-modal.modal-checkout
-            >Checkout</b-button>
+              @click="addCart(value)"
+              v-if="!checkCart(value)"
+            >Add to cart</b-button>
             <b-button
-              class="cancel-btn"
+              class="remove-cart"
               variant="danger"
-              style="background: #F24F8A;"
-              @click="cart = []"
-            >Cancel</b-button>
+              @click="removeCart(value)"
+              v-else
+            >Remove from cart</b-button>
+          </b-col>
+        </b-row>
+
+        <div class="mt-3">
+          <b-pagination
+            v-model="page"
+            :total-rows="totalData"
+            :per-page="limit"
+            @change="pageChange"
+            v-show="showPagination"
+          ></b-pagination>
+        </div>
+      </b-col>
+
+      <b-col cols="12" lg="4" class="cart-list-empty" v-if="cartCount() < 1">
+        <img src="@/assets/img/empty-cart.png" alt />
+        <p>
+          Your cart is empty
+          <br />
+          <span>Please add some items from the menu</span>
+        </p>
+      </b-col>
+
+      <b-col cols="12" lg="4" class="cart-list" v-else>
+        <div class="cart-overflow">
+          <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
+            <b-col cols="3" md="4">
+              <b-img :src="img" fluid />
+            </b-col>
+            <b-col cols="5" md="5" style="padding: 0">
+              <p class="name-cart">{{value.product_name}}</p>
+              <b-input-group>
+                <b-button class="plus-minus" variant="success" @click="minus(value)">-</b-button>
+                <input type="text" v-model="value.qty" class="qty" />
+                <b-button class="plus-minus" variant="success" @click="plus(value)">+</b-button>
+              </b-input-group>
+            </b-col>
+            <b-col cols="4" md="3" style="padding: 0" align-self="end">
+              <p
+                class="price-cart"
+              >Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+            </b-col>
           </b-row>
-        </b-col>
-      </b-row>
-
-      <b-sidebar id="sidebar-backdrop" :title="msg" backdrop-variant="dark" backdrop shadow>
-        <Sidebar />
-      </b-sidebar>
-
-      <b-modal id="modal-checkout" title="Checkout Success!" hide-footer centered>
-        <b-row>
+        </div>
+        <b-row class="checkout">
           <b-col cols="6">
-            <p>Checkout</p>
+            <p>
+              Total :
+              <br />
+              <span>*Tax not included</span>
+            </p>
           </b-col>
           <b-col cols="6" style="text-align: end;">
-            <p>Receipt no: #{{invoice}}</p>
-          </b-col>
-        </b-row>
-        <p style="margin-bottom: 50px; font-size: 13px;">Cashier: {{user}}</p>
-        <b-row v-for="(value, index) in cart" :key="index" class="checkout-list">
-          <b-col cols="6">
-            <p>{{value.product_name}} {{value.qty}}x</p>
-          </b-col>
-          <b-col cols="6" style="text-align: end;">
-            <p>Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col cols="6">
-            <p>Tax 10%</p>
-          </b-col>
-          <b-col cols="6" style="text-align: end;">
-            <p>Rp. {{(countTotal() * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
-          </b-col>
-          <b-col cols="12" style="text-align: end;">
-            <p>Total: Rp. {{(countTotal() + (countTotal() * 0.1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
-          </b-col>
-          <b-col cols="12">
-            <p>Payment: Cash</p>
+            <p>Rp. {{countTotal().toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}*</p>
           </b-col>
           <b-button
             class="checkout-btn"
             variant="info"
             style="background: #57cad5;"
-            @click="endCheck()"
-          >Print</b-button>
+            @click="postOrder(cart)"
+            v-b-modal.modal-checkout
+          >Checkout</b-button>
+          <b-button
+            class="cancel-btn"
+            variant="danger"
+            style="background: #F24F8A;"
+            @click="cart = []"
+          >Cancel</b-button>
         </b-row>
-      </b-modal>
-    </b-container>
-  </div>
+      </b-col>
+    </b-row>
+
+    <div>
+      <Sidebar />
+    </div>
+
+    <b-modal id="modal-checkout" title="Checkout Success!" hide-footer centered>
+      <b-row>
+        <b-col cols="6">
+          <p>Checkout</p>
+        </b-col>
+        <b-col cols="6" style="text-align: end;">
+          <p>Receipt no: #{{invoice}}</p>
+        </b-col>
+      </b-row>
+      <!-- <p style="margin-bottom: 50px; font-size: 13px;">Cashier: {{user}}</p> -->
+      <b-row v-for="(value, index) in cart" :key="index" class="checkout-list">
+        <b-col cols="6">
+          <p>{{value.product_name}} {{value.qty}}x</p>
+        </b-col>
+        <b-col cols="6" style="text-align: end;">
+          <p>Rp. {{(value.product_price * value.qty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="6">
+          <p>Tax 10%</p>
+        </b-col>
+        <b-col cols="6" style="text-align: end;">
+          <p>Rp. {{(countTotal() * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+        </b-col>
+        <b-col cols="12" style="text-align: end;">
+          <p>Total: Rp. {{(countTotal() + (countTotal() * 0.1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}}</p>
+        </b-col>
+        <b-col cols="12">
+          <p>Payment: Cash</p>
+        </b-col>
+        <b-button
+          class="checkout-btn"
+          variant="info"
+          style="background: #57cad5;"
+          @click="endCheck()"
+        >Print</b-button>
+      </b-row>
+    </b-modal>
+  </b-container>
 </template>
 
 <script>
@@ -203,8 +201,6 @@ export default {
   },
   data() {
     return {
-      greet: 'Welcome',
-      user: 'Cashier #1',
       sortText: 'Sort',
       totalData: 0,
       page: 1,
@@ -232,7 +228,7 @@ export default {
     },
     getProduct() {
       axios
-        .get(`${process.env.VUE_APP_IP}/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
+        .get(`${process.env.VUE_APP_BASE_URL}/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
         .then((response) => {
           this.keyword = ''
           this.product = response.data.data
@@ -250,7 +246,7 @@ export default {
         this.showPagination = true
       } else {
         axios
-          .get(`${process.env.VUE_APP_IP}/product/search?keyword=${this.keyword}`)
+          .get(`${process.env.VUE_APP_BASE_URL}/product/search?keyword=${this.keyword}`)
           .then((response) => {
             this.showPagination = false
             this.sortText = 'Sort'
@@ -369,7 +365,7 @@ export default {
         this.setOrder = [...this.setOrder, dataOrder]
       }
       axios
-        .post(`${process.env.VUE_APP_IP}/order`, this.setOrder)
+        .post(`${process.env.VUE_APP_BASE_URL}/order`, this.setOrder)
         .then((response) => {
           this.invoice = response.data.data.invoice
         })
@@ -388,13 +384,6 @@ export default {
         variant: variant,
         solid: true
       })
-    }
-  },
-  computed: {
-    msg: {
-      get() {
-        return `${this.greet}, ${this.user} !`
-      }
     }
   }
 }

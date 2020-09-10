@@ -240,7 +240,7 @@ export default {
   methods: {
     getProduct() {
       axios
-        .get(`${process.env.VUE_APP_IP}/product?page=${this.page}&limit=100`)
+        .get(`${process.env.VUE_APP_BASE_URL}/product?page=${this.page}&limit=100`)
         .then((response) => {
           this.product = response.data.data
           this.product.map(value => {
@@ -265,7 +265,7 @@ export default {
     },
     getCategory() {
       axios
-        .get(`${process.env.VUE_APP_IP}/category`)
+        .get(`${process.env.VUE_APP_BASE_URL}/category`)
         .then((response) => {
           this.category = response.data.data
           this.category.map(value => {
@@ -296,7 +296,7 @@ export default {
     },
     addProduct() {
       axios
-        .post(`${process.env.VUE_APP_IP}/product`, this.form)
+        .post(`${process.env.VUE_APP_BASE_URL}/product`, this.form)
         .then((response) => {
           this.getProduct()
         })
@@ -325,7 +325,7 @@ export default {
     },
     patchProduct() {
       axios
-        .patch(`${process.env.VUE_APP_IP}/product/${this.productId}`, this.form)
+        .patch(`${process.env.VUE_APP_BASE_URL}/product/${this.productId}`, this.form)
         .then((response) => {
           this.isUpdate = false
           location.reload()
@@ -336,7 +336,7 @@ export default {
     },
     patchCategory() {
       axios
-        .patch(`${process.env.VUE_APP_IP}/category/${this.categoryId}`, this.formCategory)
+        .patch(`${process.env.VUE_APP_BASE_URL}/category/${this.categoryId}`, this.formCategory)
         .then((response) => {
           this.isUpdate = false
           location.reload()
@@ -390,7 +390,7 @@ export default {
     deleteProduct(data) {
       this.productId = data.item.ID
       axios
-        .delete(`${process.env.VUE_APP_IP}/product/${this.productId}`)
+        .delete(`${process.env.VUE_APP_BASE_URL}/product/${this.productId}`)
         .then((response) => {
           location.reload()
         })
@@ -401,7 +401,7 @@ export default {
     deleteCategory(data) {
       this.categoryId = data.item.category_id
       axios
-        .delete(`${process.env.VUE_APP_IP}/category/${this.categoryId}`)
+        .delete(`${process.env.VUE_APP_BASE_URL}/category/${this.categoryId}`)
         .then((response) => {
           location.reload()
         })
@@ -411,7 +411,7 @@ export default {
     },
     addCategory() {
       axios
-        .post(`${process.env.VUE_APP_IP}/category`, this.formCategory)
+        .post(`${process.env.VUE_APP_BASE_URL}/category`, this.formCategory)
         .then((response) => {
           this.getCategory()
         })

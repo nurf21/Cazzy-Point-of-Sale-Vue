@@ -1,8 +1,8 @@
 <template>
-  <b-container fluid>
+  <b-container fluid class="auth-container">
     <div class="vertical-center">
       <div class="inner-block">
-        <div class="vue-template">
+        <div class="form-container">
           <form @submit.prevent="onSubmit">
             <h3>Welcome !</h3>
 
@@ -28,7 +28,7 @@
 
             <button type="submit" class="btn btn-dark btn-lg btn-block">Login</button>
             <p class="warning text-center mt-2 mb-4" v-show="isError">{{ error() }}</p>
-            <p class="sign-up text-center mt-2 mb-4">
+            <p class="link text-center mt-2 mb-4">
               Not registered?
               <router-link to="/register">
                 <span>Create an account</span>
@@ -70,82 +70,4 @@ export default {
 }
 </script>
 
-<style scoped>
-* {
-  box-sizing: border-box;
-}
-
-.container-fluid {
-  background: #76b852 !important;
-  min-height: 100vh;
-  display: flex;
-  font-weight: 400;
-}
-
-.vue-template,
-.vertical-center {
-  width: 100%;
-  height: 100%;
-}
-
-.vertical-center {
-  display: flex;
-  text-align: left;
-  justify-content: center;
-  flex-direction: column;
-  margin: auto;
-}
-
-.inner-block {
-  width: 450px;
-  margin: auto;
-  background: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
-  border-radius: 15px;
-  transition: all .3s;
-}
-
-.vertical-center .form-control:focus {
-  border-color: #2554FF;
-  box-shadow: none;
-}
-
-.vertical-center h3 {
-  text-align: center;
-  margin: 0;
-  line-height: 1;
-  padding-bottom: 20px;
-}
-
-label {
-  font-weight: bold;
-}
-
-.warning {
-  text-align: center;
-  font-size: 13px;
-  padding-top: 10px;
-  color: red;
-  margin: 0;
-}
-
-.sign-up,
-.sign-up a {
-  text-align: center;
-  font-size: 13px;
-  padding-top: 10px;
-  color: #7a7a7a;
-  margin: 0;
-}
-
-.sign-up span {
-  color: #2554FF;
-}
-
-@media (max-width: 480px) {
-  .inner-block {
-    width: 100%;
-  }
-}
-</style>
+<style scoped src="@/assets/css/style.css"></style>

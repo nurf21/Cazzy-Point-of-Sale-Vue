@@ -37,7 +37,7 @@ export default {
     getProduct(context, payload) {
       axios
         .get(
-          `${process.env.VUE_APP_IP}/product?page=${context.state.page}&limit=100`
+          `${process.env.VUE_APP_BASE_URL}/product?page=${context.state.page}&limit=100`
         )
         .then(response => {
           context.commit('setProduct', response.data)
@@ -49,7 +49,7 @@ export default {
     addProduct(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${process.env.VUE_APP_IP}/product`, payload)
+          .post(`${process.env.VUE_APP_BASE_URL}/product`, payload)
           .then(response => {
             console.log(response)
             resolve(response.data)
