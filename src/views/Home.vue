@@ -142,9 +142,7 @@
       </b-col>
     </b-row>
 
-    <div>
-      <Sidebar />
-    </div>
+    <Sidebar />
 
     <b-modal id="modal-checkout" title="Checkout Success!" hide-footer centered>
       <b-row>

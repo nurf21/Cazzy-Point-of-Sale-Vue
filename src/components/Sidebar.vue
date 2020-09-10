@@ -34,8 +34,8 @@
       </router-link>
     </b-navbar>
     <b-navbar variant="faded" type="light">
-      <b-navbar-brand @click="handleLogout" class="logout">
-        <img src="@/assets/img/settings.png" class="mr-2 d-inline-block align-top" alt="setting" />
+      <b-navbar-brand @click="confirmLogout" class="logout">
+        <img src="@/assets/img/logout.png" class="mr-2 d-inline-block align-top" alt="setting" />
         Logout
       </b-navbar-brand>
     </b-navbar>
@@ -50,12 +50,25 @@ export default {
   data() {
     return {
       user: {},
-      url: process.env.VUE_APP_BASE_URL
+      url: process.env.VUE_APP_BASE_URL,
+      isLogout: false
     }
   },
   methods: {
     ...mapActions({ handleLogout: 'logout', getUserData: 'userData' }),
-    ...mapGetters(['getUser'])
+    ...mapGetters(['getUser']),
+    confirmLogout() {
+      this.$bvModal.msgBoxConfirm('Are you sure want to logout?', {
+        cancelVariant: 'danger',
+        okVariant: 'success',
+        headerClass: 'p-2 border-bottom-0',
+        footerClass: 'p-2 border-top-0',
+        centered: true
+      }).then(value => {
+        this.isLogout = value
+        this.isLogout ? this.handleLogout() : console.log(value)
+      })
+    }
   },
   computed: {
     greet: {
