@@ -36,7 +36,7 @@
       <b-col
         cols="12"
         lg="3"
-        md="6"
+        md="4"
         v-for="(value, index) in product"
         :key="index"
         class="product-list"
@@ -64,15 +64,15 @@
       </b-col>
     </b-row>
 
-    <!-- <div class="mt-3">
+    <div class="mt-3 pagination">
       <b-pagination
-        v-model="page"
-        :total-rows="totalData"
-        :per-page="limit"
-        @change="pageChange"
-        v-show="showPagination"
+        v-model="currPage"
+        :total-rows="totalRows"
+        :per-page="perPage"
+        @change="onPage"
+        v-show="!isSearch"
       ></b-pagination>
-    </div>-->
+    </div>
   </b-col>
 </template>
 
@@ -92,40 +92,49 @@ export default {
   },
   methods: {
     ...mapActions(['getProduct', 'searchProduct']),
-    ...mapMutations(['addCart', 'removeCart', 'sortProduct']),
+    ...mapMutations(['addCart', 'removeCart', 'sortProduct', 'pageChange']),
     onSort(value) {
-      this.sortDrop = value
+      if (value === 'category_id') {
+        this.sortDrop = 'Category'
+      } else if (value === 'product_name ASC') {
+        this.sortDrop = 'A-Z'
+      } else if (value === 'product_name DESC') {
+        this.sortDrop = 'Z-A'
+      } else if (value === 'product_created_at ASC') {
+        this.sortDrop = 'Oldest'
+      } else if (value === 'product_created_at DESC') {
+        this.sortDrop = 'Newest'
+      } else if (value === 'product_price ASC') {
+        this.sortDrop = 'Lowest Price'
+      } else if (value === 'product_price DESC') {
+        this.sortDrop = 'Highest Price'
+      }
       this.sortProduct(value)
       this.getProduct()
-      this.$router.push(`?ob=${this.sortDrop}&p=${this.currPage}`)
+      this.$router.push(`?ob=${value}&p=${this.currPage}`)
     },
     checkCart(data) {
       return this.cart.some((item) => item.product_id === data.product_id)
     },
     search() {
       this.$router.push(`?q=${this.keyword}`)
-      this.sortDrop = 'Sort'
       if (this.keyword === '') {
         this.getProduct()
         this.isSearch = false
       } else {
         this.isSearch = true
+        this.sortDrop = 'Sort'
         this.searchProduct(this.keyword)
-        // .then((response) => {
-        //     this.showPagination = false
-        //     this.sortText = 'Sort'
-        //     this.sort = ''
-        //     this.product = response.data.data.searchResult
-        //     this.totalData = response.data.data.totalData
-        //   })
-        //   .catch((error) => {
-        //     console.log(error)
-        //   })
       }
+    },
+    onPage(value) {
+      this.pageChange(value)
+      this.$router.push(`?ob=${this.sort}&p=${value}`)
+      this.getProduct()
     }
   },
   computed: {
-    ...mapGetters({ cart: 'getCart', product: 'getProduct' })
+    ...mapGetters({ cart: 'getCart', product: 'getProduct', totalRows: 'getTotalRows', perPage: 'getLimit', page: 'getPage', sort: 'getSort' })
   },
   created() {
     this.getProduct()
@@ -133,50 +142,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.container-menu {
-  background: rgba(190, 195, 202, 0.3);
-  min-height: 85vh;
-}
-
-.menu-row {
-  margin: 20px auto;
-  max-height: 500px;
-  overflow: scroll;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-.product-list {
-  margin: 20px 0;
-}
-
-.product-list img {
-  margin-bottom: 15px;
-  border: 1px solid;
-  width: 150px;
-  height: 150px;
-}
-
-.product-list p {
-  font-size: 25px;
-  margin: 0;
-}
-
-.add-cart {
-  border: none;
-  margin-top: 10px;
-}
-
-.remove-cart {
-  background: #f24f8a;
-  border: none;
-  margin-top: 10px;
-}
-
-.add-cart:hover,
-.add-cart:focus {
-  background-color: #5fe7ff;
-}
-</style>
+<style scoped src="@/assets/css/style.css"></style>

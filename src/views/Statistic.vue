@@ -114,10 +114,7 @@
         </b-row>
       </b-col>
     </b-row>
-
-    <b-sidebar id="sidebar-backdrop" :title="msg" backdrop-variant="dark" backdrop shadow>
-      <Sidebar />
-    </b-sidebar>
+    <Sidebar />
   </b-container>
 </template>
 
@@ -252,6 +249,7 @@ export default {
         .get(`${process.env.VUE_APP_BASE_URL}/history/income?date=${this.currDate}`)
         .then(response => {
           this.todayIncome = response.data.data
+          console.log(response.data.data)
         })
         .catch(error => {
           console.log(error)
@@ -406,11 +404,6 @@ export default {
     }
   },
   computed: {
-    msg: {
-      get() {
-        return `${this.greet}, ${this.user} !`
-      }
-    },
     rows() {
       return this.items.length
     }

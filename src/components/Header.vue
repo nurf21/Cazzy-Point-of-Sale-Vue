@@ -16,22 +16,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.header-icon {
-  margin: 33px auto;
-}
-
-.header-text {
-  margin: auto;
-  text-align: center;
-}
-
-.header-text h1 {
-  font-size: 30px;
-  margin: 0;
-}
-
-*:focus {
-  outline: none;
-}
-</style>
+<style scoped src="@/assets/css/style.css"></style>

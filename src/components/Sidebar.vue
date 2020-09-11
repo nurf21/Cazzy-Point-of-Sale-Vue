@@ -89,29 +89,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.avatar {
-  border-radius: 100%;
-  padding: 10px 55px 10px 55px;
-}
-.user {
-  text-align: center;
-  font-size: 20px;
-  text-decoration: none;
-  color: rgba(0, 0, 0, 0.9);;
-}
-.navbar {
-  margin: 10px auto;
-}
-a.navbar-brand:hover {
-  color: red;
-}
-.navbar img {
-  width: 30px;
-  height: 30px;
-}
-
-.logout {
-  cursor: pointer;
-}
-</style>
+<style scoped src="@/assets/css/style.css"></style>

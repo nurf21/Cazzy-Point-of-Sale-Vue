@@ -10,27 +10,11 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  name: 'Counter',
   computed: {
     ...mapGetters({ cart: 'getCart' })
   }
 }
 </script>
 
-<style scoped>
-.cart-header {
-  height: 100px;
-  background: #ffffff;
-  box-shadow: 0px 4px 1px rgba(0, 0, 0, 0.25);
-}
-
-.cart-header h2 {
-  font-size: 25px;
-  margin: 33px auto;
-  text-align: center;
-}
-
-.badge {
-  background: #57cad5;
-  border-radius: 100%;
-}
-</style>
+<style scoped src="@/assets/css/style.css"></style>
