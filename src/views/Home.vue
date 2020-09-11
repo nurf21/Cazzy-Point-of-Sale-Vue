@@ -4,17 +4,12 @@
       <b-col cols="12" lg="8" class="header">
         <Header text="Menu" />
       </b-col>
-
-      <b-col cols="12" lg="4" class="cart-header">
-        <h2>
-          Cart
-          <b-badge>{{ cartCount() }}</b-badge>
-        </h2>
-      </b-col>
+      <Counter />
     </b-row>
 
     <b-row>
-      <b-col cols="12" lg="8" class="container-menu">
+      <Inventory />
+      <!-- <b-col cols="12" lg="8" class="container-menu">
         <b-row class="menu-row">
           <b-col cols="12" class="option">
             <b-form v-on:submit.prevent="searchProduct" inline>
@@ -82,18 +77,18 @@
             v-show="showPagination"
           ></b-pagination>
         </div>
-      </b-col>
+      </b-col>-->
 
-      <b-col cols="12" lg="4" class="cart-list-empty" v-if="cartCount() < 1">
+      <!-- <b-col cols="12" lg="4" class="cart-list-empty" v-if="cartCount() < 1">
         <img src="@/assets/img/empty-cart.png" alt />
         <p>
           Your cart is empty
           <br />
           <span>Please add some items from the menu</span>
         </p>
-      </b-col>
+      </b-col>-->
 
-      <b-col cols="12" lg="4" class="cart-list" v-else>
+      <!-- <b-col cols="12" lg="4" class="cart-list" v-else>
         <div class="cart-overflow">
           <b-row v-for="(value, index) in cart" :key="index" class="cart-items">
             <b-col cols="3" md="4">
@@ -139,7 +134,7 @@
             @click="cart = []"
           >Cancel</b-button>
         </b-row>
-      </b-col>
+      </b-col>-->
     </b-row>
 
     <Sidebar />
@@ -190,19 +185,22 @@
 import axios from 'axios'
 import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
+import Counter from '@/components/Counter'
+import Inventory from '@/components/Inventory'
 
 export default {
   name: 'Home',
   components: {
     Header,
-    Sidebar
+    Sidebar,
+    Counter,
+    Inventory
   },
   data() {
     return {
       sortText: 'Sort',
       totalData: 0,
       page: 1,
-      limit: 6,
       keyword: '',
       sort: 'product_id',
       product: [],
@@ -214,9 +212,6 @@ export default {
       invoice: null
     }
   },
-  created() {
-    this.getProduct()
-  },
   updated() {
     this.page = this.$route.query.p
   },
@@ -224,18 +219,18 @@ export default {
     scrollToTop() {
       window.scrollTo(0, 0)
     },
-    getProduct() {
-      axios
-        .get(`${process.env.VUE_APP_BASE_URL}/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
-        .then((response) => {
-          this.keyword = ''
-          this.product = response.data.data
-          this.totalData = response.data.pagination.totalData
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
+    // getProduct() {
+    //   axios
+    //     .get(`${process.env.VUE_APP_BASE_URL}/product?page=${this.page}&limit=${this.limit}&sort=${this.sort}`)
+    //     .then((response) => {
+    //       this.keyword = ''
+    //       this.product = response.data.data
+    //       this.totalData = response.data.pagination.totalData
+    //     })
+    //     .catch((error) => {
+    //       console.log(error)
+    //     })
+    // },
     searchProduct() {
       this.$router.push(`?q=${this.keyword}`)
       if (this.keyword === '') {
@@ -313,21 +308,21 @@ export default {
       this.$router.push(`?ob=${this.sort}&p=${this.page}`)
       this.getProduct()
     },
-    addCart(data) {
-      const setCart = {
-        product_id: data.product_id,
-        product_name: data.product_name,
-        product_price: data.product_price,
-        qty: 1
-      }
-      this.cart = [...this.cart, setCart]
-    },
-    checkCart(data) {
-      return this.cart.some((item) => item.product_id === data.product_id)
-    },
-    removeCart(data) {
-      return this.cart.splice(this.cart.findIndex(item => item.product_id === data.product_id), 1)
-    },
+    // addCart(data) {
+    //   const setCart = {
+    //     product_id: data.product_id,
+    //     product_name: data.product_name,
+    //     product_price: data.product_price,
+    //     qty: 1
+    //   }
+    //   this.cart = [...this.cart, setCart]
+    // },
+    // checkCart(data) {
+    //   return this.cart.some((item) => item.product_id === data.product_id)
+    // },
+    // removeCart(data) {
+    //   return this.cart.splice(this.cart.findIndex(item => item.product_id === data.product_id), 1)
+    // },
     minus(data) {
       if (data.qty === 1) {
         this.removeCart(data)
@@ -343,9 +338,6 @@ export default {
       this.getProduct()
       this.scrollToTop()
       this.$router.push(`?ob=${this.sort}&p=${value}`)
-    },
-    cartCount() {
-      return this.cart.length
     },
     countTotal() {
       let total = 0
