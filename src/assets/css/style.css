@@ -497,7 +497,7 @@ button {
     -webkit-overflow-scrolling: touch;
   }
 
-  .pagination {
+  .pageInvent {
     position: absolute;
     bottom: 0;
   }

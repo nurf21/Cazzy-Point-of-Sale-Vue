@@ -64,7 +64,7 @@
       </b-col>
     </b-row>
 
-    <div class="mt-3 pagination">
+    <div class="mt-3 pageInvent">
       <b-pagination
         v-model="currPage"
         :total-rows="totalRows"
