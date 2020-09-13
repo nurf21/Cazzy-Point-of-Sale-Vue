@@ -5,7 +5,6 @@ import Statistic from '../views/Statistic.vue'
 import Setting from '../views/Setting.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Product from '../views/main/Product.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -27,12 +26,6 @@ const routes = [
     path: '/setting',
     name: 'Setting',
     component: Setting,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/product',
-    name: 'Product',
-    component: Product,
     meta: { requiresAuth: true }
   },
   {

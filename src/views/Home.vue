@@ -83,7 +83,7 @@ export default {
       this.cancelCart()
       this.makeToast('success')
     },
-    makeToast(variant = null) {
+    makeToast(variant) {
       this.$bvToast.toast('Checkout Printed', {
         title: 'Success',
         variant: variant,

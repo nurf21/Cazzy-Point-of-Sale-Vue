@@ -4,6 +4,7 @@ export default {
   state: {
     cart: [],
     product: [],
+    productItem: [],
     page: 1,
     limit: 8,
     sort: 'product_id',
@@ -14,6 +15,28 @@ export default {
     setProduct(state, payload) {
       state.product = payload.data
       state.totalRows = payload.pagination.totalData
+    },
+    setProductItem(state, payload) {
+      payload.data.map(value => {
+        const setProduct = {
+          ID: value.product_id,
+          Name: value.product_name,
+          Image: value.product_image,
+          Price: `Rp. ${value.product_price
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`,
+          price: value.product_price,
+          category_id: value.category_id,
+          Category: value.category_name,
+          Created: value.product_created_at.slice(0, 10),
+          Updated: value.product_updated_at.slice(0, 10)
+        }
+        state.productItem = [...state.productItem, setProduct]
+        state.totalRows = payload.pagination.totalData
+      })
+    },
+    clearProductItem(state) {
+      state.productItem = []
     },
     setSearchResult(state, payload) {
       state.product = payload
@@ -72,6 +95,18 @@ export default {
           console.log(error.response)
         })
     },
+    getProductItem(context) {
+      axios
+        .get(
+          `${process.env.VUE_APP_BASE_URL}/product?page=${context.state.page}&limit=100`
+        )
+        .then(response => {
+          context.commit('setProductItem', response.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    },
     searchProduct(context, payload) {
       axios
         .get(
@@ -84,6 +119,48 @@ export default {
         .catch(error => {
           console.log(error.response)
         })
+    },
+    addProduct(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_BASE_URL}/product`, payload)
+          .then(response => {
+            context.commit('clearProductItem')
+            resolve(response.data)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    patchProduct(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(
+            `${process.env.VUE_APP_BASE_URL}/product/${payload.id}`,
+            payload.form
+          )
+          .then(response => {
+            context.commit('clearProductItem')
+            resolve(response.data)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    deleteProduct(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`${process.env.VUE_APP_BASE_URL}/product/${payload}`)
+          .then(response => {
+            context.commit('clearProductItem')
+            resolve(response.data)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     },
     postOrder(context, payload) {
       axios
@@ -102,6 +179,9 @@ export default {
     },
     getProduct(state) {
       return state.product
+    },
+    getProductItem(state) {
+      return state.productItem
     },
     getTotalRows(state) {
       return state.totalRows

@@ -4,6 +4,7 @@ import router from '../../router'
 export default {
   state: {
     user: {},
+    allUser: {},
     token: localStorage.getItem('token') || null,
     errorLogin: ''
   },
@@ -11,6 +12,16 @@ export default {
     setUser(state, payload) {
       state.user = payload
       state.token = payload.token
+    },
+    setAllUser(state, payload) {
+      state.allUser = payload
+      state.allUser.map(value => {
+        value.user_created_at = value.user_created_at.slice(0, 10)
+        value.user_updated_at = value.user_updated_at.slice(0, 10)
+      })
+    },
+    clearUser(state) {
+      state.user = {}
     },
     setError(state, payload) {
       state.errorLogin = payload
@@ -41,6 +52,33 @@ export default {
           .get(`${process.env.VUE_APP_BASE_URL}/users/${payload}`)
           .then(response => resolve(response.data))
           .catch(error => reject(error.response))
+      })
+    },
+    allUserData(context) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${process.env.VUE_APP_BASE_URL}/users`)
+          .then(response => {
+            context.commit('setAllUser', response.data.data)
+            resolve(response.data)
+          })
+          .catch(error => reject(error.response))
+      })
+    },
+    patchUser(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(
+            `${process.env.VUE_APP_BASE_URL}/users/${payload.id}`,
+            payload.form
+          )
+          .then(response => {
+            context.commit('clearUser')
+            resolve(response.data)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
       })
     },
     register(context, payload) {
@@ -109,6 +147,12 @@ export default {
     },
     getUser(state) {
       return state.user
+    },
+    getAllUser(state) {
+      return state.allUser
+    },
+    getRowsUser(state) {
+      return state.allUser.length
     }
   }
 }

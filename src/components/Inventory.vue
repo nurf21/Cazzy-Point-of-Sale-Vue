@@ -137,6 +137,7 @@ export default {
     ...mapGetters({ cart: 'getCart', product: 'getProduct', totalRows: 'getTotalRows', perPage: 'getLimit', page: 'getPage', sort: 'getSort' })
   },
   created() {
+    this.pageChange(1)
     this.getProduct()
   }
 }
