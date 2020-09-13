@@ -13,7 +13,7 @@
             variant="info"
             v-show="!isSearch"
           >
-            <b-dropdown-item-button @click="onSort('category_id'); sort='Category'">Category</b-dropdown-item-button>
+            <b-dropdown-item-button @click="onSort('category_id')">Category</b-dropdown-item-button>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-group id="dropdown-group-1" header="Name">
               <b-dropdown-item-button @click="onSort('product_name ASC')">A-Z</b-dropdown-item-button>

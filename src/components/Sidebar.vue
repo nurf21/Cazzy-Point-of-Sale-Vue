@@ -68,7 +68,9 @@ export default {
         centered: true
       }).then(value => {
         this.isLogout = value
-        this.isLogout ? this.handleLogout() : console.log(value)
+        if (this.isLogout) {
+          this.handleLogout()
+        }
       })
     }
   },
@@ -82,7 +84,6 @@ export default {
   created() {
     this.getUserData(this.getUser().user_id).then(result => {
       this.user = result.data[0]
-      console.log(this.user.user_role)
     }).catch(error => {
       console.log(error)
       alert('Please login first')
