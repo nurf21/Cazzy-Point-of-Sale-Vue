@@ -1,9 +1,7 @@
 <template>
   <b-sidebar id="sidebar-backdrop" :title="greet" backdrop-variant="dark" backdrop shadow>
     <b-img :src="url + '/' + user.user_image" class="avatar" fluid />
-    <router-link to="/profile" class="user">
       <p>{{ user.user_name }}</p>
-    </router-link>
     <hr />
     <b-navbar variant="faded" type="light">
       <router-link to="/">

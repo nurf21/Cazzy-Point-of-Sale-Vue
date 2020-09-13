@@ -59,6 +59,7 @@ export default {
     ...mapGetters({ error: 'getError' }),
     ...mapActions(['login']),
     onSubmit() {
+      this.isError = false
       this.login(this.form).then((result) => {
         this.$router.push('/')
       }).catch((error) => {
