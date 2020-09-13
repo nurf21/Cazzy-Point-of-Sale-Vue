@@ -13,7 +13,7 @@
             variant="info"
             v-show="!isSearch"
           >
-            <b-dropdown-item-button @click="onSort('category_id'); sort='Category'" active>Category</b-dropdown-item-button>
+            <b-dropdown-item-button @click="onSort('category_id'); sort='Category'">Category</b-dropdown-item-button>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-group id="dropdown-group-1" header="Name">
               <b-dropdown-item-button @click="onSort('product_name ASC')">A-Z</b-dropdown-item-button>
@@ -97,17 +97,17 @@ export default {
       if (value === 'category_id') {
         this.sortDrop = 'Category'
       } else if (value === 'product_name ASC') {
-        this.sortDrop = 'A-Z'
+        this.sortDrop = 'Name (A-Z)'
       } else if (value === 'product_name DESC') {
-        this.sortDrop = 'Z-A'
+        this.sortDrop = 'Name (Z-A)'
       } else if (value === 'product_created_at ASC') {
-        this.sortDrop = 'Oldest'
+        this.sortDrop = 'Date (Oldest)'
       } else if (value === 'product_created_at DESC') {
-        this.sortDrop = 'Newest'
+        this.sortDrop = 'Date (Newest)'
       } else if (value === 'product_price ASC') {
-        this.sortDrop = 'Lowest Price'
+        this.sortDrop = 'Price (Lowest)'
       } else if (value === 'product_price DESC') {
-        this.sortDrop = 'Highest Price'
+        this.sortDrop = 'Price (Highest)'
       }
       this.sortProduct(value)
       this.getProduct()

@@ -13,7 +13,7 @@
         </b-navbar-brand>
       </router-link>
     </b-navbar>
-    <b-navbar variant="faded" type="light">
+    <b-navbar variant="faded" type="light" v-if="user.user_role === 1" >
       <router-link to="/statistic">
         <b-navbar-brand>
           <img
@@ -25,7 +25,7 @@
         </b-navbar-brand>
       </router-link>
     </b-navbar>
-    <b-navbar variant="faded" type="light">
+    <b-navbar variant="faded" type="light" v-if="user.user_role === 1">
       <router-link to="/setting">
         <b-navbar-brand>
           <img src="@/assets/img/settings.png" class="mr-2 d-inline-block align-top" alt="setting" />
@@ -49,7 +49,9 @@ export default {
   name: 'Sidebar',
   data() {
     return {
-      user: {},
+      user: {
+        user_image: 'blank-profile.jpg'
+      },
       url: process.env.VUE_APP_BASE_URL,
       isLogout: false
     }
@@ -80,6 +82,7 @@ export default {
   created() {
     this.getUserData(this.getUser().user_id).then(result => {
       this.user = result.data[0]
+      console.log(this.user.user_role)
     }).catch(error => {
       console.log(error)
       alert('Please login first')

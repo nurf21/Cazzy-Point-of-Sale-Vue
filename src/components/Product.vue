@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     ...mapActions(['getProductItem', 'getCategory', 'addProduct', 'patchProduct', 'deleteProduct']),
-    ...mapMutations(['clearProductItem']),
+    ...mapMutations(['clearProductItem', 'pageChange']),
     addButton() {
       this.form = {
         category_id: '',
@@ -224,6 +224,7 @@ export default {
     ...mapGetters({ productItem: 'getProductItem', category: 'getCategory', totalRows: 'getTotalRows' })
   },
   created() {
+    this.pageChange(1)
     this.clearProductItem()
     this.getProductItem()
     this.getCategory()
