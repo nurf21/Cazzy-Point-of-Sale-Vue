@@ -122,16 +122,17 @@ export default {
       }
       this.patchUser(payload).then(result => {
         this.allUserData()
-        this.makeToast('success', 'User Updated')
+        this.makeToast('success', 'Success', 'User Updated')
         this.$bvModal.hide('modal-user')
       })
         .catch((error) => {
+          this.makeToast('danger', 'Error', 'User Updated')
           console.log(error)
         })
     },
-    makeToast(variant, msg) {
+    makeToast(variant, title, msg) {
       this.$bvToast.toast(msg, {
-        title: 'Success',
+        title,
         variant: variant,
         solid: true
       })
