@@ -83,7 +83,15 @@ export default {
         })
       }).catch((error) => {
         this.isError = true
+        this.makeToast('danger')
         console.log(error)
+      })
+    },
+    makeToast(variant) {
+      this.$bvToast.toast(this.error(), {
+        title: 'Error',
+        variant: variant,
+        solid: true
       })
     }
   }

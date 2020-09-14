@@ -126,7 +126,7 @@ export default {
         this.$bvModal.hide('modal-user')
       })
         .catch((error) => {
-          this.makeToast('danger', 'Error', 'User Updated')
+          this.makeToast('danger', 'Error', error.data.msg)
           console.log(error)
         })
     },
