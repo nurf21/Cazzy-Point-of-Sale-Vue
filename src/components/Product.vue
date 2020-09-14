@@ -152,16 +152,16 @@ export default {
       this.addProduct(data)
         .then((response) => {
           this.getProductItem()
-          this.makeToast('success', 'Product Added')
+          this.makeToast('success', 'Success', 'Product Added')
           this.$bvModal.hide('modal-1')
         })
         .catch((error) => {
-          alert(error.data.msg)
+          this.makeToast('danger', 'Error', error.data.msg)
         })
     },
-    makeToast(variant, msg) {
+    makeToast(variant, title, msg) {
       this.$bvToast.toast(msg, {
-        title: 'Success',
+        title,
         variant: variant,
         solid: true
       })
@@ -190,11 +190,11 @@ export default {
       }
       this.patchProduct(payload).then(respsone => {
         this.getProductItem()
-        this.makeToast('success', 'Product Updated')
+        this.makeToast('success', 'Success', 'Product Updated')
         this.$bvModal.hide('modal-1')
         this.isUpdate = false
       }).catch((error) => {
-        alert(error.data.msg)
+        this.makeToast('danger', 'Error', error.data.msg)
       })
     },
     showDelBoxProd(data) {

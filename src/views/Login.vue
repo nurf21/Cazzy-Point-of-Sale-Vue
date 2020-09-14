@@ -64,7 +64,15 @@ export default {
         this.$router.push('/')
       }).catch((error) => {
         this.isError = true
-        console.log(error)
+        this.makeToast('danger')
+        throw error
+      })
+    },
+    makeToast(variant) {
+      this.$bvToast.toast(this.error(), {
+        title: 'Error',
+        variant: variant,
+        solid: true
       })
     }
   }

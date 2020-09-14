@@ -112,16 +112,16 @@ export default {
     onSubmitCat() {
       this.addCategory(this.formCat).then(result => {
         this.getCategory()
-        this.makeToast('success', 'Category Added')
+        this.makeToast('success', 'Success', 'Category Added')
         this.$bvModal.hide('modal-2')
       })
         .catch((error) => {
-          alert(error.data.msg)
+          this.makeToast('danger', 'Error', error.data.msg)
         })
     },
-    makeToast(variant, msg) {
+    makeToast(variant, title, msg) {
       this.$bvToast.toast(msg, {
-        title: 'Success',
+        title,
         variant: variant,
         solid: true
       })
@@ -141,11 +141,11 @@ export default {
       }
       this.patchCategory(payload).then(result => {
         this.getCategory()
-        this.makeToast('success', 'Category Updated')
+        this.makeToast('success', 'Success', 'Category Updated')
         this.$bvModal.hide('modal-2')
       })
         .catch((error) => {
-          alert(error.data.msg)
+          this.makeToast('danger', 'Error', error.data.msg)
         })
     },
     showDelBoxCat(data) {
