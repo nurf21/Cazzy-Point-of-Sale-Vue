@@ -58,7 +58,7 @@
           <b-form-input id="nested-email" v-model="formUser.user_email" disabled></b-form-input>
         </b-form-group>
         <b-form-group label-cols-sm="3" label="Name" label-for="nested-name">
-          <b-form-input id="nested-name" v-model="formUser.user_name"></b-form-input>
+          <b-form-input id="nested-name" v-model="formUser.user_name" required></b-form-input>
         </b-form-group>
         <b-form-group label-cols-sm="3" label="Role" label-for="nested-role">
           <b-form-select id="nested-role" v-model="formUser.user_role" :options="roleOpt"></b-form-select>

@@ -69,7 +69,7 @@
     <b-modal id="modal-2" :title="modalTitle" hide-footer>
       <b-form @submit.prevent="onSubmitCat">
         <b-form-group label-cols-sm="3" label="Name" label-for="nested-name">
-          <b-form-input id="nested-name" v-model="formCat.category_name"></b-form-input>
+          <b-form-input id="nested-name" v-model="formCat.category_name" required></b-form-input>
         </b-form-group>
 
         <b-button type="submit" variant="primary" v-if="!isUpdate">Submit</b-button>
