@@ -83,31 +83,25 @@ export default {
   methods: {
     ...mapMutations(['cancelCart']),
     endCheck() {
-      const conf = {
-        margin: {
-          top: 75
-        }
-      }
-      const columns = ['Item', 'Amount', 'Total']
-      const rows = []
+      let orders = ''
       for (let i = 0; i < this.cart.length; i++) {
-        rows.push([this.cart[i].product_name, this.cart[i].qty, `Rp. ${this.cart[i].qty * this.cart[i].product_price}`])
+        orders = orders.concat(`${this.cart[i].product_name} ${this.cart[i].qty}x Rp. ${this.cart[i].qty * this.cart[i].product_price}\n`)
       }
       const doc = new Jspdf()
       doc.setFont('helvetica')
       doc.setFontSize(12)
       doc.text(
-        `Checkout \n
-        Receipt no: #${this.invoice} \n
-        Cashier: ${this.user.user_name} \n
-        Tax 10%: Rp. ${(this.countTotal() * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} \n
-        Total: Rp. ${(this.countTotal() + (this.countTotal() * 0.1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} \n
-        Payment: Cash`,
+        `Checkout
+        \nReceipt no : #${this.invoice}
+        \nCashier : ${this.user.user_name}
+        \n${orders}
+        \nTax 10% : Rp. ${(this.countTotal() * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+        \nTotal : Rp. ${(this.countTotal() + (this.countTotal() * 0.1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+        \nPayment : Cash`,
         15,
         15
       )
-      doc.autoTable(columns, rows, conf)
-      doc.save('checkout.pdf')
+      doc.save(`checkout#${this.invoice}.pdf`)
       this.$bvModal.hide('modal-checkout')
       this.cancelCart()
       this.makeToast('success', 'Success', 'Checkout Printed')
