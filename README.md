@@ -1,6 +1,16 @@
-<h1 align='center'>Vue JS - Cazzy POS - Cozy and Easy</h1>
+<h1 align='center'>Vue JS - Cazzy</h1>
+  <p align="center">
+    <a href="https://cazzy.netlify.app/">View Demo</a>
+    ·
+    <a href="https://github.com/nurf21/Cazzy-Point-of-Sale-Vue/issues/">Report Bug</a>
+    ·
+    <a href="https://github.com/nurf21/Cazzy-Point-of-Sale-Vue/issues/">Request Feature</a>
+  </p>
 
-Cazzy POS is the Point of Sale software that helps you run your store, cafe, restaurant, and many more. Not only for checkout, Cazzy POS can tracks orders, manage items, and users. It's accessible for mobile, laptop, and desktop [More about Vue](https://vuejs.org/)
+![Image Banner](https://user-images.githubusercontent.com/59104753/96540486-17622800-12c8-11eb-8478-362f0a05045b.jpg)
+
+## About The Project
+Cazzy POS is the Point of Sale software that helps you run your store, cafe, restaurant, and many more. Not only for checkout, Cazzy POS can tracks orders, manage items, and users. It's accessible for mobile, laptop, and desktop.
 
 ## Built With
 
@@ -11,35 +21,26 @@ Cazzy POS is the Point of Sale software that helps you run your store, cafe, res
 
 1. <a href="https://nodejs.org/en/download/">Node Js</a>
 2. Node_modules `npm install` or `yarn install`
-3. Backend API Cazzy RESTfull API [`here`](https://github.com/nurf21/Cazzy-POS-App-API-Backend.git)
+3. Backend API Cazzy [`here`](https://github.com/nurf21/Cazzy-POS-App-API-Backend)
 
-## How to Install
+## Getting Started
 
-1. Download this Project or you can type `git clone https://github.com/nurf21/Cazzy-POS-App-API-Backend.git`
+1. Download this Project or you can type `git clone https://github.com/nurf21/Cazzy-Point-of-Sale-Vue.git`
 2. Open app's directory in CMD or Terminal
 3. Type `npm install` or `yarn install`
-4. Type `npm start`
-
-## Visit the Web
-
-You can visit the web [`here`](https://cazzy.netlify.app/)
-
-## Compiles and hot-reloads for development
-
+4. Add .env file at root folder project
+```sh
+VUE_APP_BASE_URL = https://backend-cazzy.fwdev.online
 ```
-npm run serve
-```
+5. Type `npm run serve`
 
-## Compiles and minifies for production
+## Acknowledgements
 
-```
-npm run build
-```
-
-## Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- [Axios](https://www.npmjs.com/package/axios)
+- [Vuex](https://vuex.vuejs.org/)
 
 ## License
 
 © [Giri Said Nurfauzan](https://github.com/nurf21)
+
+---
