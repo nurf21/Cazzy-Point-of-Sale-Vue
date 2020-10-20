@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode development",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.20.0",
@@ -13,6 +14,8 @@
     "bootstrap-vue": "^2.16.0",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
+    "jspdf": "^2.1.1",
+    "jspdf-autotable": "^3.5.13",
     "vue": "^2.6.12",
     "vue-chartkick": "^0.6.1",
     "vue-router": "^3.2.0",
@@ -25,13 +28,32 @@
     "@vue/cli-plugin-router": "^4.5.4",
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-standard": "^5.1.2",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.0",
+    "babel-loader": "^8.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-template-compiler": "^2.6.11"
+    "jest": "^26.6.0",
+    "vue-jest": "^3.0.7",
+    "vue-template-compiler": "^2.6.11",
+    "vue-test-utils": "^1.0.0-beta.11"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^vue$": "vue/dist/vue.common.js"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    }
   }
 }

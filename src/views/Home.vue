@@ -51,7 +51,7 @@
           variant="info"
           style="background: #57cad5;"
           @click="endCheck()"
-        >Print</b-button>
+        >Download as PDF</b-button>
       </b-row>
     </b-modal>
   </b-container>
@@ -64,10 +64,14 @@ import Counter from '@/components/Counter'
 import Inventory from '@/components/Inventory'
 import CartEmpty from '@/components/CartEmpty'
 import Cart from '@/components/Cart'
+import mixins from '../mixins/mixins'
+import Jspdf from 'jspdf'
+import 'jspdf-autotable'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
+  mixins: [mixins],
   components: {
     Header,
     Sidebar,
@@ -79,16 +83,34 @@ export default {
   methods: {
     ...mapMutations(['cancelCart']),
     endCheck() {
+      const conf = {
+        margin: {
+          top: 75
+        }
+      }
+      const columns = ['Item', 'Amount', 'Total']
+      const rows = []
+      for (let i = 0; i < this.cart.length; i++) {
+        rows.push([this.cart[i].product_name, this.cart[i].qty, `Rp. ${this.cart[i].qty * this.cart[i].product_price}`])
+      }
+      const doc = new Jspdf()
+      doc.setFont('helvetica')
+      doc.setFontSize(12)
+      doc.text(
+        `Checkout \n
+        Receipt no: #${this.invoice} \n
+        Cashier: ${this.user.user_name} \n
+        Tax 10%: Rp. ${(this.countTotal() * 0.1).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} \n
+        Total: Rp. ${(this.countTotal() + (this.countTotal() * 0.1)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} \n
+        Payment: Cash`,
+        15,
+        15
+      )
+      doc.autoTable(columns, rows, conf)
+      doc.save('checkout.pdf')
       this.$bvModal.hide('modal-checkout')
       this.cancelCart()
-      this.makeToast('success')
-    },
-    makeToast(variant) {
-      this.$bvToast.toast('Checkout Printed', {
-        title: 'Success',
-        variant: variant,
-        solid: true
-      })
+      this.makeToast('success', 'Success', 'Checkout Printed')
     },
     countTotal() {
       let total = 0

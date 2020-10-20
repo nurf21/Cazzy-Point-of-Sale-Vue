@@ -11,6 +11,7 @@
               <input
                 type="email"
                 v-model="form.user_email"
+                v-focus
                 placeholder="Email"
                 class="form-control form-control-lg"
               />
@@ -42,10 +43,12 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Login',
+  mixins: [mixins],
   data() {
     return {
       form: {
@@ -64,16 +67,16 @@ export default {
         this.$router.push('/')
       }).catch((error) => {
         this.isError = true
-        this.makeToast('danger')
+        this.makeToast('danger', 'Error', this.error())
         throw error
       })
-    },
-    makeToast(variant) {
-      this.$bvToast.toast(this.error(), {
-        title: 'Error',
-        variant: variant,
-        solid: true
-      })
+    }
+  },
+  directives: {
+    focus: {
+      inserted: el => {
+        el.focus()
+      }
     }
   }
 }

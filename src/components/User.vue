@@ -81,10 +81,12 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'User',
+  mixins: [mixins],
   data() {
     return {
       userField: [
@@ -129,13 +131,6 @@ export default {
           this.makeToast('danger', 'Error', error.data.msg)
           console.log(error)
         })
-    },
-    makeToast(variant, title, msg) {
-      this.$bvToast.toast(msg, {
-        title,
-        variant: variant,
-        solid: true
-      })
     }
   },
   computed: {

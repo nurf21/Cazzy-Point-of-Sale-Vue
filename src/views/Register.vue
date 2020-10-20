@@ -11,6 +11,7 @@
               <input
                 type="text"
                 v-model="form.user_name"
+                v-focus
                 placeholder="Name"
                 class="form-control form-control-lg"
               />
@@ -52,10 +53,12 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Register',
+  mixins: [mixins],
   data() {
     return {
       form: {
@@ -83,16 +86,16 @@ export default {
         })
       }).catch((error) => {
         this.isError = true
-        this.makeToast('danger')
+        this.makeToast('danger', 'Error', this.error())
         console.log(error)
       })
-    },
-    makeToast(variant) {
-      this.$bvToast.toast(this.error(), {
-        title: 'Error',
-        variant: variant,
-        solid: true
-      })
+    }
+  },
+  directives: {
+    focus: {
+      inserted: el => {
+        el.focus()
+      }
     }
   }
 }

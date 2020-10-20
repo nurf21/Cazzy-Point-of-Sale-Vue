@@ -80,10 +80,12 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Category',
+  mixins: [mixins],
   data() {
     return {
       catField: [
@@ -118,13 +120,6 @@ export default {
         .catch((error) => {
           this.makeToast('danger', 'Error', error.data.msg)
         })
-    },
-    makeToast(variant, title, msg) {
-      this.$bvToast.toast(msg, {
-        title,
-        variant: variant,
-        solid: true
-      })
     },
     setCategory(data) {
       this.modalTitle = 'Edit Category'

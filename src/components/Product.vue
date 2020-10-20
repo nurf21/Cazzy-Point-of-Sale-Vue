@@ -101,10 +101,12 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'Product',
+  mixins: [mixins],
   data() {
     return {
       form: {},
@@ -159,13 +161,6 @@ export default {
           this.makeToast('danger', 'Error', error.data.msg)
         })
     },
-    makeToast(variant, title, msg) {
-      this.$bvToast.toast(msg, {
-        title,
-        variant: variant,
-        solid: true
-      })
-    },
     setProduct(value) {
       this.form = {
         product_name: value.item.Name,
@@ -212,7 +207,7 @@ export default {
         if (value === true) {
           this.deleteProduct(data.item.ID)
           this.getProductItem()
-          this.makeToast('success', 'Product Deleted')
+          this.makeToast('success', 'Success', 'Product Deleted')
         }
       })
         .catch(error => {
