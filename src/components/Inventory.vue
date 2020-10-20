@@ -77,17 +77,18 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'Inventory',
+  mixins: [mixins],
   data() {
     return {
       keyword: '',
       sortDrop: 'Sort',
       isSearch: false,
-      currPage: 1,
-      url: process.env.VUE_APP_BASE_URL
+      currPage: 1
     }
   },
   methods: {

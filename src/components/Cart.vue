@@ -49,14 +49,15 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'Cart',
+  mixins: [mixins],
   data() {
     return {
-      setOrder: [],
-      url: process.env.VUE_APP_BASE_URL
+      setOrder: []
     }
   },
   methods: {

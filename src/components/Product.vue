@@ -123,8 +123,7 @@ export default {
         { key: 'Created', sortable: true },
         { key: 'Updated', sortable: true },
         'actions'
-      ],
-      url: process.env.VUE_APP_BASE_URL
+      ]
     }
   },
   methods: {

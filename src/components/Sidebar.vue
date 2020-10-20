@@ -43,16 +43,17 @@
 </template>
 
 <script>
+import mixins from '../mixins/mixins'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Sidebar',
+  mixins: [mixins],
   data() {
     return {
       user: {
         user_image: 'blank-profile.jpg'
       },
-      url: process.env.VUE_APP_BASE_URL,
       isLogout: false
     }
   },
@@ -84,10 +85,6 @@ export default {
   created() {
     this.getUserData(this.getUser().user_id).then(result => {
       this.user = result.data[0]
-    }).catch(error => {
-      console.log(error)
-      alert('Please login first')
-      this.handleLogout()
     })
   }
 }

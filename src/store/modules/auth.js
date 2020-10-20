@@ -127,10 +127,23 @@ export default {
               router.push('/login')
               alert(error.response.data.msg)
             } else if (error.response.data.msg === 'jwt expired') {
-              localStorage.removeItem('token')
-              context.commit('delUser')
-              router.push('/login')
-              alert(error.response.data.msg)
+              return new Promise((resolve, reject) => {
+                const payload = {
+                  userId: context.state.user.user_id,
+                  refreshToken: context.state.user.refreshToken
+                }
+                axios
+                  .post(`${process.env.VUE_APP_BASE_URL}/users/refresh`, payload)
+                  .then(response => {
+                    console.log(response.data)
+                    context.commit('setUser', response.data.data)
+                    localStorage.setItem('token', response.data.data.token)
+                    resolve(response.data)
+                  })
+                  .catch(error => {
+                    reject(error.response)
+                  })
+              })
             }
           }
           return Promise.reject(error)
